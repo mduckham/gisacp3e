@@ -21,10 +21,11 @@ The following resources for students and instructors are in development. If you 
 - Audiobook versions for 5 open access chapters (Chapters 1, 2, 3, 8, 9) \[planned 2024\]
 - Outline presentation slides in MS Powerpoint and Google Slides for all chapters \[in progress\]
 
+
 | Chapter | Title | PDF | Audiobook | Presentation slides 
 | ----------- | ----------- |  ----------- |  ----------- |  ----------- 
 | 1 | Introduction | \[[repo](oa_chapters/10.1201_9780429168093-1_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-1/introduction-matt-duckham-qian-chayn-sun-michael-worboys)\]| expected 06/24 | \[[google](https://docs.google.com/presentation/d/1NWYgRgmdm1eYZJLnw9WCQvB-Zsl_Td-v6Vny1UvYNTc/edit?usp=sharing) \| [pptx](pptx/gisacp-chapter1.pptx) \]
-| 2 | Fundamental Database Concepts | \[[repo](oa_chapters/10.1201_9780429168093-2_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-2/fundamental-database-concepts-matt-duckham-qian-chayn-sun-michael-worboys)\]| expected 06/24 | expected 04/24
+| 2 | Fundamental Database Concepts | \[[repo](oa_chapters/10.1201_9780429168093-2_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-2/fundamental-database-concepts-matt-duckham-qian-chayn-sun-michael-worboys)\]| expected 06/24 |  \[[google](https://docs.google.com/presentation/d/1TbfpkpRY4xBJ0dChQytd_PcJyZHgN-OyyIYIZXY63yM/edit?usp=sharing) \| [pptx](pptx/gisacp-chapter2.pptx) \]
 | 3 | Fundamental Spatial Concepts | \[[repo](oa_chapters/10.1201_9780429168093-3_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-3/fundamental-spatial-concepts-matt-duckham-qian-chayn-sun-michael-worboys)\]| expected 06/24 | expected 04/24
 | 4 | Models of Geospatial Information | not available | not available | expected 08/24 
 | 5 | Representation and Algorithms | not available | not available | expected 08/24 
