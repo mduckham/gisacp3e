@@ -5,7 +5,7 @@
   | 3D, *4*, 15, 166, 343
   | 4-intersection model, **106**, 104--106, *357*
   | 9-intersection model, **106**
-  |
+  | ---
   | A* algorithm, **212**
   | abduction, *361*
   | absolute location, **291**, 294, 299
