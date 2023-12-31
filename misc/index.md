@@ -85,7 +85,7 @@
 | Azimuthal Equidistant projection, 320
 | ===
 | B-tree, **225**, 225-227, 252, 258-259
-| B$^{+}$-tree, **227**
+| B^+-tree, **227**
 | back-propagation, **395**
 | back-propagation through time, **398**
 | balanced tree, 225, 227, 257
