@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Matt Duckham: Spatial
+Databases Practical 3</title>
+  <style type="text/CSS" media="all">@import "teaching.css";</style>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+  <meta content="Matt Duckham" name="author">
+  <meta content="Spatial Databases Practical on spatial analysis"
+ name="description">
+</head>
+<body>
+<div id="content">
+<h2>P3:
+Spatial Analysis<br>
+</h2>
+<h3>Objectives<br>
+</h3>
+<p>By the end of this practical
+you should be able to: <br>
+</p>
+<ol>
+  <li>retrieve information about
+objects based on their spatial
+properties and relations; and</li>
+  <li>analyse spatial relations of
+several objects.</li>
+</ol>
+This practical should require <span style="font-style: italic;">two
+weeks</span> to complete. <br>
+<h3>Overview</h3>
+<p>This practical will introduce
+you to more advanced spatial analysis in SQL. We will use the spatial
+capabilities of Oracle 10g DBMS to perform spatial operations and
+analysis on
+the sample
+data from the US Census Bureau and the Digital Chart of the World
+(covered
+in Kothuri
+et al., 2004).<br>
+</p>
+<h3>Exercise P3.1: Spatial
+Analysis&nbsp;</h3>
+<p>In the previous practicals you
+should have learned how to
+determine
+the
+basic
+properties of (mostly) a single spatial object, and perform some simple
+geometric operations upon those objects (e.g., distances). In the
+following excercise we will analyse spatial relations of multiple
+objects of different
+types (polygons, lines, and points). The term "spatial join" refers to
+performing a relational join on tables based on some spatial
+criterion.&nbsp;</p>
+<ol>
+  <li><span style="font-style: italic;">Nearest
+neighbor</span>:
+In the previous practical we found the 10 closest restaurants to a
+particular restuarant using the SDO_DISTANCE function with a nested
+SELECT statement. The same analysis can be performed using the nearest
+neighbor function.
+Doing so requires a spatial index. These indexes have already been
+created for you, but normally you would create your own spatial index
+on the "location" column of the us_restaurants table, as in previous
+weeks' practicals.
+Perform
+the same analysis as in P3.1.1 using the following template (nearest
+neighbor
+operator):<br>
+    <div class="example">SELECT
+... FROM ... WHERE
+... AND SDO_NN(analysis_spatialcolumn, origin_spatialcolumn)='TRUE' AND
+ROWNUM &lt;=10;</div>
+Note the simplified syntax of a typical spatial operator. The order of
+the two geometry columns in the query is always preserved. Also note
+that by adding a third parameter to the SDO_NN function (param1,
+param2, 'SDO_NUM_RES=10') you can achieve the same result. This
+restricts the number of nearest&nbsp;neighbors retrieved (referred
+to
+as the <span style="font-style: italic;">k</span>-nearest
+neighbors
+problem). <br>
+  </li>
+  <li><span style="font-style: italic;">Closest
+interstate</span>: Use
+the techniques you have already learned to select the
+interstate (highway) closest to the restaurant with ID 33625120. <br>
+  </li>
+  <li><span style="font-style: italic;">Aggregation
+of results: </span>Determine
+the total area in square miles of US states with a population of more
+than 15 million
+people.
+You will select spatial objects based on non-spatial attributes and
+determine a joint spatial property. Use the&nbsp;SUM operator
+together with the SDO_AREA function to get the total value.
+    <div class="example">SELECT
+SUM(expression) FROM ...</div>
+  </li>
+  <li><span style="font-style: italic;">Relate
+operation</span> #1:
+We
+want to find restaurants within Maryland,
+using a spatial operation. We want only restaurants lying within
+Maryland,
+based on the geometry of the outline of Maryland. This can be achieved
+using the SDO_RELATE
+operator, which determines the spatial (topological) relationship
+between two geometries:
+    <div class="example">...
+SDO_RELATE(geometry1,
+geometry2,
+'MASK=ANYINTERACT')='TRUE' ...;</div>
+Note that the available interactions (masks) can be more restrictive
+than ANYINTERACT (e.g., EQUAL, COVERS/COVEREDBY, INSIDE/CONTAINS,
+TOUCH,
+DISJOINT, OVERLAPBDYINTERSECT), and can also be combined
+using the "+" function. For more information on the different
+topological relationships supported by Oracle, refer to the lecture
+notes or an Oracle Spatial reference source (such as Kothuri et al.,
+2004).<br>
+However, a brief description of the possible relationships is given
+below (see <a
+ href="http://www.oreillynet.com/pub/a/network/2003/11/10/oracle_spatial.html?page=2">oreillynet.com</a>):
+    <ul>
+      <li> DISJOINT: the
+boundaries and interiors do not
+intersect </li>
+      <li> TOUCH: the boundaries
+intersect but the interiors do
+not
+intersect </li>
+      <li> OVERLAPBDYDISJOINT: the
+interior of one object
+intersects
+the
+boundary and interior of the other object, but the two boundaries do
+not intersect. This relationship occurs, for example, when a line
+originates outside a polygon and ends inside that polygon. </li>
+      <li> OVERLAPBDYINTERSECT:
+the boundaries and interiors of
+the two
+objects intersect </li>
+      <li> EQUAL: the two objects
+have the same boundary and
+interior </li>
+      <li> CONTAINS: the interior
+and boundary of one object is
+completely contained in the interior of the other object </li>
+      <li> COVERS: the interior of
+one object is completely
+contained
+in
+the interior of the other object and their boundaries intersect </li>
+      <li> INSIDE: the opposite of
+CONTAINS. A INSIDE B implies B
+CONTAINS A. </li>
+      <li> COVEREDBY: the opposite
+of COVERS. A COVEREDBY B
+implies B
+COVERS A. </li>
+      <li> ON: the interior and
+boundary of one object is on the
+boundary
+of the other object (and the second object covers the first object).
+This relationship occurs, for example, when a line is on the boundary
+of a polygon. </li>
+      <li> ANYINTERACT: the
+objects are non-disjoint </li>
+    </ul>
+  </li>
+  <li><span style="font-style: italic;">Relate </span><span
+ style="font-style: italic;">operation #2</span>:&nbsp;Find
+all the
+interstates and rivers that cross (anyinteract) the
+state of New York.</li>
+  <li><span style="font-style: italic;">Relate </span><span
+ style="font-style: italic;">operation #3</span>:&nbsp;Find
+all the
+states that border (touch) the state of New
+York.http://www.lms.unimelb.edu.au<span style="font-style: italic;"></span></li>
+  <li><span style="font-style: italic;">Relate </span><span
+ style="font-style: italic;">operation #4</span>:
+Retrieve the name of
+the US state in which the "Wah Mee Restaurant" is located (contained),
+based on the
+coordinates of its location. <span style="font-style: italic;"></span></li>
+  <li><span style="font-style: italic;">Relate </span><span
+ style="font-style: italic;">operation #5</span>:
+List
+all the states
+which the "I95" interstate passes through.</li>
+  <li><span style="font-style: italic;">Relate o</span><span
+ style="font-style: italic;">peration #6</span>:
+List
+all the
+interstates which cross the "Potomac" river.</li>
+  <li><span style="font-style: italic;">Relate </span><span
+ style="font-style: italic;">operation #7</span>:&nbsp;Find
+all the
+US states that border (touch) exactly one other US state. (This is
+quite tricky!)<span style="font-style: italic;"></span></li>
+</ol>
+<h3>Exercise P3.2: Retrieving
+coordinate information<br>
+</h3>
+<span style="font-style: italic;"></span>It
+is
+possible to retrieve
+some of the
+spatial&nbsp;parameters of spatial objects stored within
+an SDO_GEOMETRY type in a straightforward way:
+<ol>
+  <li><span style="font-style: italic;">Retrive
+coordinate information</span>:
+It is possible to retrieve the coordinates of a point geometry in a
+straightforward way. List the lat, long values of restaurants within
+New York state in a
+table
+containig columns NAME, X, Y. Hint: you have to use the
+alias notation for the table, otherwise Oracle returns an error. The
+general pattern of the query function for the coordinates x is:<br>
+    <div class="example">SELECT
+tablealias.geom_column.SDO_POINT.x FROM table tablealias ...;</div>
+  </li>
+</ol>
+<h3>Exercise P3.3: Overlay
+operations<br>
+</h3>
+<span style="font-style: italic;"></span>As
+well as
+using the relate
+operation to find the relationship between two spatial objects, we can
+combine spatial objects into new objects using set-based operators,
+like intersection, union, and difference. <br>
+<ol>
+  <li><span style="font-style: italic;">Union</span>:
+The union of two
+geometries can be constructed using the SDO_GEOM.SDO_UNION function,
+with the template below. Create the region that is the union of France
+and Germany.&nbsp; Output the lat/long coordinates of the centroid
+of
+the union of France and Germany. <br>
+    <div class="example">SDO_GEOM.SDO_UNION(geometry1,
+geometry2,
+tolerance); </div>
+  </li>
+  <li><span style="font-style: italic;">Intersection</span>
+#1: The
+intersection of two geometries can be constructed using a similar
+function, as below. Find the intersection of the "I81" and the "St.
+Lawrence" river.
+    <div class="example">SDO_GEOM.SDO_INTERSECTION(geometry1,
+geometry2, tolerance); </div>
+  </li>
+  <li><span style="font-style: italic;">Intersection</span>
+#2: Now
+find the restaurant that is closest to the intersection of "I81" and
+the "St. Lawrence" river (in one query). How far away is it (in miles)?<br>
+  </li>
+  <li><span style="font-style: italic;">Intersection</span>
+#3: How far
+away from the intersection of the "I81" and the
+"St. Lawrence" river is the intersection of the "I95" and the Potomac?<br>
+  </li>
+</ol>
+<h3>Assessment A3: Spatial Analysis</h3>
+<h4>Assignment</h4>
+The questions you must answer for this assignment all concern the
+sample
+data that you should now be familiar with in
+the practicals. Your assignment is to
+provide SQL/Oracle statements to
+answer to the following 10 questions (see "Submission" section above
+for more details). <br>
+<ol>
+  <li>List in alphabetical order
+the names of all the states that the
+"I81" interstate passes
+through. <br>
+  </li>
+  <li>List the total population of
+states that the "I81" interstate
+passes through. <br>
+  </li>
+  <li>List in alphabetical order
+the names of the 5 closest restaurants
+to the "I95"
+interstate. <br>
+  </li>
+  <li>List in alphabetical order
+the names of all the interstates that
+cross the "Savannah"
+river. <br>
+  </li>
+  <li>List in alphabetical order
+the names of all the states that
+border "California".&nbsp;</li>
+  <li>Compute the length in miles
+of the "Mississippi" river that lies <span style="font-style: italic;">within</span>
+the state of "Mississippi".<br>
+  </li>
+  <li>Using each country's
+geometry, compute the total area (in square
+miles) of all countries with
+populations of greater that 100 million people.&nbsp;</li>
+  <li>Compute the area in square
+miles of the region that contains all
+places within 10 miles of
+the border between Germany and France.&nbsp;</li>
+  <li>List the names of all the
+interstates that connect Florida and
+Texas (i.e., pass through <span style="font-style: italic;">both</span>
+states).</li>
+  <li>List in alphabetical order
+the names of all the restaurants that
+are within 100m of the
+border between "District of Columbia" and "Maryland" states.</li>
+</ol>
+</div>
+<a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img
+ alt="Creative Commons License" style="border-width: 0pt;"
+ src="http://i.creativecommons.org/l/by/3.0/us/80x15.png"></a><br>
+This work is created by Matt Duckham (<a href="http://www.duckham.org">http://www.duckham.org</a>)
+and licensed under a <a rel="license"
+ href="http://creativecommons.org/licenses/by/3.0/us/">Creative
+Commons Attribution 3.0 United States License</a>.
+</body>
+</html>

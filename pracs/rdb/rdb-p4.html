@@ -1,0 +1,737 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Matt Duckham: Spatial
+Databases Practical 4</title>
+  <style type="text/CSS" media="all">@import "teaching.css";</style>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+  <meta content="Matt Duckham" name="author">
+  <meta content="Spatial Databases Practical on network analysis"
+ name="description">
+</head>
+<body>
+<div id="content">
+<h2>P4:
+Network Analysis<br>
+</h2>
+<h3>Objectives<br>
+</h3>
+<p>By the end of this practical
+you should be able to: <br>
+</p>
+<ol>
+  <li>create and retrieve
+information about objects based on their
+spatial
+relations in networks;<br>
+  </li>
+  <li>perform specific network
+analysis tasks; and<br>
+  </li>
+  <li>write simple PL/SQL code to
+execute SQL-based procedures and
+routines. <br>
+  </li>
+</ol>
+This practical should require <span style="font-style: italic;">two
+weeks</span> to complete. <br>
+<h3>Overview</h3>
+<p>This practical will introduce
+you to the basics of spatial analysis of networks in SQL. We will use
+the spatial
+capabilities of Oracle 10g DBMS. Basic spatial operations in networks
+will be
+covered.&nbsp;</p>
+<p>Spatial networks are sets of
+nodes connected by edges, such as might
+be used to represent cities
+connected by roads or railways. In network models, the Euclidean
+distance between nodes does not have to equal the network distance.
+Edges (links) in the network may be directed or
+undirected. In addition to connectivity, networks in Oracle Spatial
+have geometric information associated with them (for instance,
+geographic
+coordinates of the nodes).</p>
+Some of the excercises will use the Procedural Language (PL) extension
+of the SQL language from Oracle. PL enables you to run more complex,
+structured programs with conditions, loops, etc. The basic structure
+of a PL/SQL <span style="font-style: italic;">block</span>
+is:
+<div class="example">DECLARE<br>
+/*optional */<br>
+/*this is a comment */<br>
+BEGIN<br>
+/*core section of the block, compulsory*/<br>
+EXCEPTION<br>
+/*Error handling,... Optional*/<br>
+END;<br>
+.<br>
+run; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; /*
+this
+runs the program*/</div>
+<h3>Exercise P4.1: Network data
+entry<br>
+</h3>
+Spatial networks are sets of nodes connected by edges, such as cities
+connected by roads or railways. In network models, the Euclidean
+distance between nodes is not necessarily equal to the network
+distance. In this exercise, we will create a simple
+network, fill it with data, and perform some basic analysis.
+<ul>
+  <li><span style="font-style: italic;">Login to the
+course database server</span> (in <span style="font-style: italic;">Oracle*SQL
+instant client</span>).
+Log in to the server using the same connection string as in previous
+practicals.</li>
+</ul>
+<ol>
+  <li><span style="font-style: italic;">Network
+creation: </span>There
+are several ways to create a network in Oracle. We will use the
+automatic way, which lets Oracle create all the necessary table
+structures with the procedure SDO_NET.CREATE_SDO_NETWORK.&nbsp;The
+parameters to this procedure provide the name of the network
+("tutorial"), the number of
+hierarchical levels (1), whether the graph is directed (true), and
+whether costs
+are assigned to nodes (false). Use the following PL procedure to create
+the
+empty tutorial network:<br>
+    <div class="example">exec
+SDO_NET.CREATE_SDO_NETWORK
+('tutorial',1,true,false)</div>
+This automated procedure also creates all the necessary entries in the
+network metadata tables. It does not, however, create entries in the
+spatial metadata tables in case of a spatial network. <br>
+  </li>
+  <li><span style="font-style: italic;">Get an
+overview of the
+available data structures</span>:
+Verify that
+the&nbsp;following tables are present and describe their
+structure:
+TUTORIAL_NODE$,&nbsp;TUTORIAL_LINK$,&nbsp;TUTORIAL_PATH$
+and&nbsp;TUTORIAL_PLINK$. Detailed description of some of the
+columns can be found by referring to the lecture notes and to other
+documentation (e.g., Kothuri et al. 2004).<span
+ style="font-style: italic;"></span>
+The tables
+containing "paths" and "plinks" will not be used for the timebeing, so
+can be ignored.
+Validate the network created through the following command:
+    <div class="example">SELECT
+SDO_NET.VALIDATE_NETWORK
+('tutorial') FROM DUAL;</div>
+  </li>
+The only errors should be those indication missing spatial ("geom")
+metadata. Note that "DUAL" is just a dummy table necessary to make the
+SELECT statement run. <br>
+  <li><img src="figure4-1.png" alt=""
+ style="width: 580px; height: 277px; float: right;" vspace="5"><span
+ style="font-style: italic;">Input of
+network data: </span>We will fill
+the network "tutorial" with
+the network provided in the figure on the right. For convenience, where
+two links connect a pair of nodes in opposite directions, one link is
+preceded with a negative sign (e.g., L6 connects N8 to N7; -L6 connects
+N7 to N8). The costs of
+the links are shown in the figure (all links in opposite directions
+connecting the same nodes have equal costs). No costs are
+assigned to nodes. The (non-geographical) coordinates of the nodes are
+indicated on the margins of the figure.</li>
+  <ol style="list-style-type: lower-alpha;">
+    <li><span style="font-style: italic;">Populate
+the node table</span>: Use the
+following template to populate the
+table with node data (note that the SRID parameter is NULL):
+      <div class="example">INSERT
+INTO tutorial_node$
+(node_id, node_name, geometry) VALUES (1,'N1',SDO_GEOMETRY(2001,NULL,
+SDO_POINT_TYPE(0,2,NULL),NULL,NULL)<br>
+);</div>
+Remember to execute the COMMIT command at the end of all major
+operations to save your data. Because these commands are relatively
+repetitive and you are almost certain to make a mistake or two
+initiall, it is essential to construct your commands in a text editor
+(like notepad) using cut-and-paste. Then execute your commands
+using the "start" command (as in previous weeks). In case your get
+stuck and want to completely restart the
+creation of the network, drop the network with the command:
+      <div class="example">exec
+SDO_NET.DROP_NETWORK('NETWORK_NAME');</div>
+before trying to re-create it again. Sometimes it is necessary to also
+issue a "PURGE RECYCLEBIN" command before recreating the network.<br>
+    </li>
+    <li><span style="font-style: italic;">Populate
+the link table</span>: Now populate
+the
+tutorial_link$ table with link data. You need to enter data for the
+columns link_id, link_name,
+start_node_id, end_node_id, cost, and geometry. Inputing links follows
+the template below. Note that the <span style="font-style: italic;">direction
+      </span>of
+edges is significant (e.g., an edge from N2 to N1 is
+different from an edge from N1 to N2):&nbsp;
+      <div class="example">INSERT
+INTO tutorial_link$
+(link_id, link_name, start_node_id, end_node_id, cost, geometry) VALUES<br>
+(1,'L1',2,1,1,<br>
+SDO_GEOMETRY
+(2002,NULL,NULL,<br>
+SDO_ELEM_INFO_ARRAY
+(1,2,1),&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; --
+Straight line string element info <br>
+SDO_ORDINATE_ARRAY (1,2,0,2)&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; --
+Coodinates for link<br>
+));</div>
+    </li>
+    <li><span style="font-style: italic;">Verification
+of the network</span>: Oracle offers
+several commands to verify
+the entry of the data in your network. You can retrieve the information
+about the nodes, links, non-connected nodes and invalid
+links.&nbsp;
+      <div class="example">SELECT
+SDO_NET.GET_NO_OF_NODES('network_name') FROM DUAL;</div>
+Other commands include .GET_NO_OF_LINKS(network_name),
+.GET_ISOLATED_NODES(network_name),
+.GET_INVALID_LINKS(network_name),
+.GET_LINK_DIRECTION(network_name,link_id). Verify
+that your network has 9 nodes and 15 links, with no isolated nodes or
+invalid links.</li>
+    <li><span style="font-style: italic;">Finding
+information about individual elements of the network</span>:
+Finally, it is possible to retrieve basic topological information about
+the
+elements of the network as such. This is important information for
+verifying that the network connectivity is correct. The basic measures
+are
+node degree (total number of links incident with a node). Node
+in/out-degree is the number of incoming and outgoing links from a
+specific node respectively (therefore for any node n,
+degree(n)=in_degree(n)+out_degree(n)). The basic commands all follow
+the same
+consistent pattern:
+      <div class="example">SELECT
+SDO_NET.GET_NODE_DEGREE('network_name', node_id) FROM DUAL;</div>
+The other commands are: .GET_NODE_IN_DEGREE, .GET_NODE_OUT_DEGREE,
+.GET_IN_LINKS, .GET_OUT_LINKS. Build an SQL statement to list all the
+nodes in numerical order along with their degree, in-degree, and
+out-degree. Make sure your output looks exactly like the following
+table.
+(Note: you can use the SQL*Plus command "COLUMN node_name FORMAT a9" to
+reformat the display of the node_name column so it fits neatly on your
+screen.)<br>
+      <div class="example">
+      <table style="width: 90%; text-align: left;" border="1"
+ cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top;">NODE_NAME<br>
+            </td>
+            <td style="vertical-align: top;">DEGREE<br>
+            </td>
+            <td style="vertical-align: top;">IN_DEGREE<br>
+            </td>
+            <td style="vertical-align: top;">OUT_DEGREE<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">--------------<br>
+            </td>
+            <td style="vertical-align: top;">--------------
+            </td>
+            <td style="vertical-align: top;">--------------
+            </td>
+            <td style="vertical-align: top;">--------------
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N1<br>
+            </td>
+            <td style="vertical-align: top;">2<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N2<br>
+            </td>
+            <td style="vertical-align: top;">2<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N3<br>
+            </td>
+            <td style="vertical-align: top;">3<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+            <td style="vertical-align: top;">2<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N4<br>
+            </td>
+            <td style="vertical-align: top;">2<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N5<br>
+            </td>
+            <td style="vertical-align: top;">3<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+            <td style="vertical-align: top;">2<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N6<br>
+            </td>
+            <td style="vertical-align: top;">5<br>
+            </td>
+            <td style="vertical-align: top;">3<br>
+            </td>
+            <td style="vertical-align: top;">2<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N7<br>
+            </td>
+            <td style="vertical-align: top;">4<br>
+            </td>
+            <td style="vertical-align: top;">3<br>
+            </td>
+            <td style="vertical-align: top;">1<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N8<br>
+            </td>
+            <td style="vertical-align: top;">5<br>
+            </td>
+            <td style="vertical-align: top;">2<br>
+            </td>
+            <td style="vertical-align: top;">3<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">N9<br>
+            </td>
+            <td style="vertical-align: top;">4<br>
+            </td>
+            <td style="vertical-align: top;">2<br>
+            </td>
+            <td style="vertical-align: top;">
+2<br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      </div>
+    </li>
+  </ol>
+</ol>
+</div>
+<h3>Exercise P4.2: Network
+analysis using Network Editor<br>
+</h3>
+Once the network is created, we can start to perform network analyses.
+Oracle
+provides a Network Editor application which we shall use in this
+exercise to help familiarize yourself with the available network
+analyses. You won't be able to view the network you have just created,
+since we didn't give it the necessary spatial reference information and
+metadata. However,
+you will be able to build and analyse your own networks, and you should
+be aware that you can also use Network Editor to connect to Oracle and
+display existing spatial networks in the database. &nbsp;
+<ol>
+  <li><span style="font-style: italic;">Start Network Editor</span>:<span
+ style="font-style: italic;"> </span>On
+lab computers, the Network
+Editor can be started via the
+Windows start menu. Start the Network Editor.&nbsp;</li>
+  <li><span style="font-style: italic;">Create a new network</span>:
+Create a new SDO network from the "Edit", "Create new network..." menu
+item. Note that you can change a variety of parameters for your
+network. Call your network "mynet," and then press the "create"
+button.&nbsp;</li>
+  <li><span style="font-style: italic;">Add nodes to the network</span>:
+Add the nodes roughly as in the figure above. Each node can be created
+by selecting "Edit", "Add new node to network...", entering any
+additional information your node may require, and then pressing
+"Create". <br>
+  </li>
+  <li><span style="font-style: italic;">Add links to the network</span>:
+Add the links to the network, again as in the figure above. Each link
+can be created by selecting "Edit", "Add new link to the network...".
+Note that you don't have to type in the IDs for every pair node which a
+link connects. Simply select the nodes where you want your new link to
+start and end in the editor window.</li>
+  <li><span style="font-style: italic;">Turn labels on</span>:
+From the
+"view" menu turn the node and link labels on. Make sure you understand
+what you are looking at. <br>
+  </li>
+  <li><span style="font-style: italic;">Compute the shortest path</span>:
+From the "Analysis" menu, you can access a variety of analyses. For
+example, compute the shortest path from node 4 to node 2. What is it's
+cost? Check with your neighbors? Do you all have the same routes/costs?
+If not, why not? What is the cost of the shortest path from node 2 to
+4? <br>
+  </li>
+  <li><span style="font-style: italic;">Experiment with other
+network
+analyses</span>: Use the Network
+Editor "Analysis" menu to experiment
+with some other network analyses. What do these different analyses do? <br>
+  </li>
+</ol>
+<h3>Exercise P4.3: Network
+analysis using PL/SQL<br>
+</h3>
+Network analysis is also possible using the&nbsp;Java
+API for Oracle (which the Network Editor uses) or in PL/SQL. Learning
+Java is beyond the focus of
+this course, so we will&nbsp;use&nbsp;simple PL/SQL scripts to
+analyse the network in a similar way to using the Network Editor.
+PL/SQL procedures are far
+too complex to type in directly to the command line. From this point
+onwards, if you are not already doing so, you must type your exercise
+answers into a text file, for example using notepad, and then run this
+file with the "start" command. Note that earlier statements which began
+with the "exec" keyword (like "exec SDO_NET.CREATE_SDO_NETWORK
+('tutorial',1,true,false)") can still be used in a PL/SQL procedure by
+omitting the "exec" keyword (simply "SDO_NET.CREATE_SDO_NETWORK
+('tutorial',1,true,false)"). You will need to use this fact to complete
+your
+assessment. <br>
+<ol>
+  <li><span style="font-style: italic;">Loading the network in a
+cache
+memory</span>: To perform network
+analysis in PL/SQL, it is necessary
+to first load the network in a
+cache memory. This creates a <span style="font-style: italic;">network
+memory object</span>. Loading the
+network can be
+performed using the following command (replace "network_name" with
+"tutorial"):
+    <div class="example">BEGIN<br>
+&nbsp;&nbsp;
+SDO_NET_MEM.NETWORK_MANAGER.READ_NETWORK('network_name','TRUE');<br>
+END;<br>
+.<br>
+run;<br>
+    </div>
+Note that every PL/SQL program is executed only after the two lines,
+the first containing only a single dot ".", the second containing the
+command "run;". It is also possible to use the character "/" in place
+of these two lines (although "/" behaves slightly differently in some
+circumstances). Note also, it is easy to forget the semicolon after
+"END;". If you do this your code will not execute properly. If
+the command executes successfully, you should see the lines of your
+code printed out, followed by the output: "PL/SQL
+procedure successfully completed." Any other messages will be errors.
+If you receive an error, double check you have correctly entered the
+procedure. Then ask a demonstrator for assistance. Also
+execute the following SQL command to ensure server system listings
+in the following excercises:<br>
+    <div class="example">SET
+SERVEROUTPUT ON FORMAT WRAP; </div>
+Bear in mind that you can have only one network in memory at a time. To
+drop the memory cache at the end of network processing
+use the PL/SQL command:<br>
+    <div class="example">BEGIN<br>
+&nbsp;&nbsp;&nbsp;
+SDO_NET_MEM.NETWORK_MANAGER.DROP_NETWORK('network_name');<br>
+END;<br>
+.<br>
+run;</div>
+  </li>
+  <li><span style="font-style: italic;">Connectivity</span>:
+It is
+possible that a network consists of several
+mutually disconnected sub-networks. To find out how many individual
+sub-networks the network contains, it is useful to get the number of
+connected components:
+    <div class="example">DECLARE<br>
+&nbsp;&nbsp;&nbsp; res_numeric NUMBER;<br>
+BEGIN<br>
+&nbsp;&nbsp;&nbsp;
+res_numeric :=
+SDO_NET_MEM.NETWORK_MANAGER.FIND_CONNECTED_COMPONENTS('network_name');<br>
+&nbsp;&nbsp;&nbsp;
+DBMS_OUTPUT.PUT_LINE('The number of connected components is: ' ||
+res_numeric);<br>
+END;<br>
+.<br>
+run; <span style="font-style: italic;"></span></div>
+Note the declaration of variables and their types, as well as the
+special output line for outputting information to the system console in
+a formatted manner.<br>
+  </li>
+  <li><span style="font-style: italic;">Neighborhood
+analysis in networks</span>: To
+retrieve the nearest neighbors of a
+node,
+follow the template below. Also find the nearest three nodes for node
+4.&nbsp;
+    <div class="example">DECLARE<br>
+&nbsp;&nbsp;&nbsp; res_array SDO_NUMBER_ARRAY;<br>
+&nbsp;&nbsp;&nbsp; res_numeric NUMBER;<br>
+BEGIN<br>
+&nbsp;&nbsp;&nbsp; res_array :=
+SDO_NET_MEM.NETWORK_MANAGER.NEAREST_NEIGHBORS('network_name',6,3);<br>
+&nbsp;&nbsp;&nbsp; DBMS_OUTPUT.PUT_LINE('IDs for the
+nearest 3
+neighbors of node 6
+are: ');<br>
+&nbsp;&nbsp;&nbsp; FOR indx IN
+res_array.FIRST..res_array.LAST<br>
+&nbsp;&nbsp;&nbsp;
+LOOP<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+res_numeric := res_array(indx);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+DBMS_OUTPUT.PUT(SDO_NET_MEM.PATH.GET_END_NODE_ID('network_name',res_numeric)
+|| ',');<br>
+&nbsp;&nbsp;&nbsp;
+END LOOP;<br>
+END;<br>
+.<br>
+run;<br>
+    </div>
+  </li>
+  <li><span style="font-style: italic;">Shortest path</span>:
+One of
+the most important network analysis operations is the shortest path.
+The shortest path
+between a source and destination node is the path with the lowest cost.
+More advanced shortest paths can take account of costs of turns and
+node
+traversal, but in our example only the costs of links are considered.
+The following code will retrieve the cost of the shortest path. Adapt
+it to find the cost of the path between nodes 4 and 2. Make sure that
+you the answer you get agrees with the answer you found in 4.2.6. <br>
+    <div class="example">DECLARE<br>
+&nbsp;&nbsp;&nbsp; cost NUMBER;<br>
+&nbsp;&nbsp;&nbsp; path_id NUMBER;<br>
+&nbsp;&nbsp;&nbsp; res_numeric NUMBER;<br>
+BEGIN<br>
+&nbsp;&nbsp;&nbsp; path_id :=
+sdo_net_mem.network_manager.shortest_path('network_name',
+source_node_id,
+dest_node_id);<br>
+&nbsp;&nbsp;&nbsp; cost :=
+SDO_NET_MEM.PATH.GET_COST('network_name', path_id);<br>
+&nbsp;&nbsp;&nbsp; DBMS_OUTPUT.PUT_LINE('The ID of the
+shortest path from X to Y is: '
+|| path_id || ' and it costs ' ||&nbsp;cost);<br>
+END;<br>
+.<br>
+run;<br>
+    </div>
+  </li>
+  <li><span style="font-style: italic;">Further PL/SQL analysis</span>:
+Given the following PL/SQL functions, and based on previous examples,
+you should be able to create a program that returns the
+names of all the links in the network, and their start and end nodes,
+in a "table" with columns LINK/START_NODE/END_NODE. The listing
+should be similar in structure to that in P4.3.4 above:<br>
+    <div class="example">SDO_NET_MEM.LINK.GET_NAME(<br>
+net_mem IN VARCHAR2,<br>
+link_id IN NUMBER<br>
+) RETURN VARCHAR2;<br>
+    <br>
+SDO_NET_MEM.LINK.GET_START_NODE_ID(<br>
+net_mem IN VARCHAR2,<br>
+link_id IN NUMBER<br>
+) RETURN NUMBER;<br>
+    <br>
+SDO_NET_MEM.LINK.GET_END_NODE_ID(<br>
+net_mem IN VARCHAR2,<br>
+link_id IN NUMBER<br>
+) RETURN NUMBER;</div>
+HINT: Use the following template to determine all the link IDs in the
+network:<br>
+    <div class="example">var1_array
+:=
+SDO_NET_MEM.PATH.GET_LINK_IDS('network_name', res_numeric);<br>
+FOR indx1 IN var1_array.FIRST..var1_array.LAST<br>
+LOOP<br>
+&nbsp;&nbsp;&nbsp; var1_numeric := var1_array(indx1);<br>
+&nbsp;&nbsp;&nbsp; DBMS_OUTPUT.PUT(var1_numeric || ' ');<br>
+END LOOP;</div>
+  </li>
+  <li><span style="font-style: italic;">Reachable nodes</span>:
+Write
+another program to retrieve all the nodes reachable from a
+specified node (5), using the template:<br>
+    <div class="example">res_array
+:=
+SDO_NET_MEM.NETWORK_MANAGER.FIND_REACHABLE_NODES('tutorial',5);</div>
+  </li>
+</ol>
+<h3>Exercise P4.4: Printing output
+in PL/SQL<br>
+</h3>
+We've already seen in previous exercises the use of the
+DBMS_OUTPUT.PUT_LINE function to output the value of PL/SQL variables
+to the screen. However, in PL/SQL it's not possible to directly output
+the results of a SELECT statement to the screen. Thus, the following
+SQL code will produce an error:<br>
+<div class="example">
+BEGIN <br>
+&nbsp; SELECT id, name FROM my_table;<br>
+END<br>
+.<br>
+run;<br>
+<span style="font-style: italic;"></span>
+</div>
+Instead, you can copy <span style="font-style: italic;">single </span>values
+from a SELECT statement into a
+variable, and then print those out using the following template: <br>
+<div class="example">
+BEGIN <br>
+&nbsp;&nbsp;
+SELECT count(id) INTO x FROM my_table;<br>
+&nbsp;&nbsp; DBMS_OUTPUT.PUT_LINE(x);<br>
+END<br>
+.<br>
+run;<br>
+<span style="font-style: italic;"></span>
+</div>
+However, to print out all the values from a table of results returned
+from a SELECT statement, you need the following syntax which puts each
+line from the SELECT statement into the "rec" record variable, and then
+prints out elements from this record. <br>
+<div class="example">BEGIN <br>
+&nbsp; &nbsp; FOR rec IN (SELECT id a, name b FROM
+my_table)&nbsp; <br>
+&nbsp;&nbsp;&nbsp; LOOP<br>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+DBMS_OUTPUT.PUT_LINE(rec.a || ', ' ||
+rec.b); <br>
+&nbsp;&nbsp;&nbsp; END LOOP;<br>
+END<br>
+.<br>
+run;<br>
+<span style="font-style: italic;"></span>
+</div>
+Try printing out some more values inside your PL/SQL procedures. Repeat
+P4.1.3d, formatting the information about nodes and their degrees,
+using a PL/SQL procedure. <br>
+<h3>Assessment A4: Network Analysis<br>
+</h3>
+<h4>Assignment</h4>
+<img alt="Assessment figure" src="figure4-2.png"
+ style="width: 387px; height: 186px; float: right;">This
+assignment
+concerns the network shown in the figure on the right. Your assignment
+is to provide a script to answer the following 10 questions. It is <span
+ style="font-style: italic;">essential </span>that
+your entire script run correctly using the "start" command in SQL*Plus
+(e.g., "start &lt;studentno&gt;.txt"). If it does not run
+correctly,
+the
+markers will not debug your script and will give you zero marks for any
+questions that don't work. You should also check very
+carefully that your script creates network <span
+ style="font-style: italic;">exactly </span>as
+shown in the Figure.
+Note that the coordinates of each node are provided in parenthesis
+after the node name, e.g., "<span style="font-style: italic;">g</span>
+(7,1)". The numbers associated with the links are the costs for those
+links. Note also that the links in this case do not have specified
+labels: you may call them any sensible names. Where two links go in
+both directions between the same pair of nodes, these links have the
+same costs (e.g., cost(<span style="font-style: italic;">ih</span>)=cost(<span
+ style="font-style: italic;">hi</span>)=25).
+<br>
+<ol>
+  <li>Create a new network called
+"assessment4" (see hint below).<br>
+  </li>
+  <li>Create the nodes for this
+network, as shown in the figure. <br>
+  </li>
+  <li>Create the links for this
+network, as shown in the figure.&nbsp;</li>
+  <li>Print out the number of
+nodes and links.</li>
+  <li>Print out the names of every
+node, along with their degree, in
+degree,
+and out degree. <br>
+  </li>
+  <li>Load the network into memory.<br>
+  </li>
+  <li>Print out the number of
+connected components in the network. <br>
+  </li>
+  <li>Print out the length of the
+shortest path from node <span style="font-style: italic;">b</span>
+to <span style="font-style: italic;">g</span>.</li>
+  <li>Print out the names of the
+five nearest neighbor nodes from node <span style="font-style: italic;">g</span>.</li>
+  <li>Drop the network, deleting
+all tables associated with this
+network.</li>
+</ol>
+<h4>Hint</h4>
+Note: for questions 1 and 10, a problem may arise because the
+SDO_CREATE_NETWORK and SDO_DROP_NETWORK functions can take some time to
+execute and are multi-threaded, meaning that subsequent statements may
+be executed
+before the network has been created, leading to errors. To avoid this
+problem, you should use the following general structure for your
+assessed assignment to guarantee that the network has been created
+before further statements are executed and deleted only after earlier
+statements have been executed.&nbsp;&nbsp;
+<div class="example">BEGIN <br>
+&nbsp; /* Your answer to question 1 (create network) */<br>
+END;<br>
+.<br>
+run;<br>
+DECLARE<br>
+&nbsp; /* Your variables */<br>
+BEGIN <br>
+&nbsp; /* Your answers to questions 2-9 */<br>
+END;<br>
+.<br>
+run;<br>
+BEGIN <br>
+&nbsp; /* Your answer to question 10 (drop network in memory and on
+the
+disk) */<br>
+END;<br>
+.<br>
+run;<br>
+<span style="font-style: italic;"></span>
+</div>
+<a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img
+ alt="Creative Commons License" style="border-width: 0pt;"
+ src="http://i.creativecommons.org/l/by/3.0/us/80x15.png"></a><br>
+This work is created by Matt Duckham (<a href="http://www.duckham.org">http://www.duckham.org</a>)
+and licensed under a <a rel="license"
+ href="http://creativecommons.org/licenses/by/3.0/us/">Creative
+Commons Attribution 3.0 United States License</a>.
+</body>
+</html>

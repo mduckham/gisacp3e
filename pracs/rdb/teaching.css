@@ -1,0 +1,115 @@
+body {
+	font-family: verdana,sans-serif;
+	font-size: small;
+	line-height: 1.4em;
+	margin: 1em;
+	padding: 1em;
+}
+
+a:link { color: #006; }
+a:visited { color: #666; }
+a:hover { color: #FF8400; }
+a:active { color: #000; }
+
+.info {
+	background: #FFFDE3;
+	padding: 1em;
+	border: 1px solid #E5E1A9;
+	color: #A5A16D;
+}
+
+.info a:link { color: #5E715E; }
+.info a:visited { color: #666; }
+
+.info p { margin: 0; }
+
+.info img {
+	float: right;
+	margin: 0.2em;
+	padding: 2px;
+	border: 1px solid #E5E1A9;
+	background: #FFF;
+}
+
+#content { margin: 1.5em; }
+
+table {font-family: verdana,sans-serif;
+	font-size: small;
+	margin: 2em; 
+}
+th { font-weight: bold; text-align: left; background: #ccc;}
+td,th { padding-right: 1em; }
+
+tr.odd {background: #CCF}
+
+
+li { }
+
+h1 {
+	font-size: 2.5em;
+	line-height: 1.0em;
+	color: #666;
+	font-family: trebuchet ms;
+}
+
+h2 {
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+	border-bottom: 1px solid #999;
+	font-size: 2em;
+	color: #666;
+	padding-bottom: 0.1em;
+	font-family: trebuchet ms;
+	line-height: 1.0em;
+}
+
+h3 {
+	margin-top: 1.0em;
+	margin-bottom: 0.5em;
+	font-size: 1.5em;
+	color: #333;
+	font-family: trebuchet ms;
+	border-bottom: 1px dotted #999;
+}
+
+h5 {
+	font-size: 1em;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+}
+
+h5+p {
+	margin-top: 0;
+}
+	
+.note {
+	font-style: italic;
+	font-size: small;
+	color: #666;
+	margin: 2em;
+	padding: 0.5em;
+	background: #EEE;
+	text-indent: 0;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+}
+
+.code {
+	font-family: monospace;
+	white-space: nowrap;
+}
+
+.demolink { text-decoration: underline; }
+
+.example {
+	margin: 1em;
+	padding: 0.5em;
+	border: 1px solid #CCC;
+	background: #F5F5F5;
+}
+
+.field {
+	color: #666;
+	background: #EEE;
+}

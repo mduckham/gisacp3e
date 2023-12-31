@@ -1,0 +1,720 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Matt Duckham: Spatial
+Databases Practical 2</title>
+  <style type="text/CSS" media="all">@import "teaching.css";</style>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+  <meta content="Matt Duckham" name="author">
+  <meta content="Spatial Databases Practical on using Oracle Spatial"
+ name="description">
+</head>
+<body>
+<div id="content">
+<h2>P2:
+Using Oracle
+Spatial <br>
+</h2>
+<h3>Objectives<br>
+</h3>
+<p>By the end of this practical
+you should be able to: <br>
+</p>
+<ol>
+  <li>understand Oracle spatial
+data types; <br>
+  </li>
+  <li>retrieve information about
+objects based on their spatial
+properties; and</li>
+  <li>create new spatial data.</li>
+</ol>
+This practical should require <span style="font-style: italic;">two
+weeks</span> to complete. <br>
+<h3>Overview</h3>
+<p>This practical will introduce
+you to the basics of spatial analysis in SQL. We will use the spatial
+capabilities of Oracle 10g DBMS to perform basic spatial operations on
+the sample
+data from the US Census Bureau, the Digital Chart of the World
+(covered
+in Kothuri
+et al., 2004), and some data created by yourself.<br>
+</p>
+<h3>Exercise P2.1: Viewing spatial
+data<br>
+</h3>
+<p>Oracle Spatial has <span style="font-style: italic;">no
+</span>spatial
+data viewing capabilities. One of the reasons why Oracle Spatial is
+such a powerful system is that unlike GIS software packages, Oracle
+Spatial treats the storage, querying, and management of spatial data as
+completely separate functions from viewing that data. However, when
+learning about Oracle spatial it is occasionally nice to be to display
+the data you are using graphically. There are many different ways that
+you can view Oracle Spatial data, including web mapping using Oracle
+Spatial MapViewer, and linking it to GIS software packages like GIS.
+However, in this section we use a&nbsp;data viewer called Spatial
+Console. Spatial Console is only available in University lab spaces.
+However, there is an unsupported, free data viewer you can download
+and use at home if you wish. Details are available on the course web
+site.&nbsp; &nbsp; <br>
+</p>
+<ol>
+  <li><span style="font-style: italic;">Prepare data
+to be viewed</span>:
+Viewing spatial data in Spatial Console requires that the data is in
+your schema, has metadata, and has an index. We shall look at creating
+metadata and indexes later in this practical. However, for now simply
+follow the steps below to prepare the world_continents data from the
+"spatial" schema for viewing in Spatial Console. To view other data,
+you may simply replace "world_continents" in the instructions below
+with the name of another&nbsp;data set in the spatial schema.
+However,
+you have a limited disk quota and so some data sets may be too large to
+store. When you have finished, you should always delete any data you
+have copied using the "DROP TABLE"&nbsp;command. &nbsp;
+&nbsp;&nbsp;</li>
+  <ol style="list-style-type: lower-alpha;">
+    <li>Log into your account
+using SQL*Plus in the usual way</li>
+    <li>Make a copy of
+world_continents in your own schema using
+the command "CREATE TABLE my_world_continents AS SELECT * FROM
+spatial.world_continents"</li>
+    <li>Copy across the metadata
+for world_continents from
+spatial's
+schema using the command "INSERT INTO user_sdo_geom_metadata (SELECT
+'my_world_continents', column_name, diminfo, srid FROM
+all_sdo_geom_metadata WHERE&nbsp; table_name='WORLD_CONTINENTS' AND
+owner='SPATIAL')"</li>
+    <li>Create an index for the
+data using the command "CREATE
+INDEX world_continents_index ON my_world_continents(geom) INDEXTYPE IS
+mdsys.spatial_index"</li>
+  </ol>
+  <li><span style="font-style: italic;">Start
+Spatial Console</span>: The Oracle
+Spatial data viewer is called Spatial Console and can be
+started using the Spatial Console menu item in Windows.&nbsp;<br>
+  </li>
+  <li><span style="font-style: italic;">Set
+connection</span>: To view
+any spatial data,&nbsp;Spatial Console&nbsp;first requires
+information
+about the
+connecting to an Oracle server. Using the connection wizard, or by
+selecting "Add" from the "Action" menu, must enter the details of the
+connection to the Oracle server, as used in Practical 1.</li>
+  <ul>
+    <li>The name can be anything
+you want (e.g., 451235). </li>
+    <li>The host is:
+ploppa.ecr.unimelb.edu.au</li>
+    <li>The port is: 1521</li>
+    <li>The SID is: geomatics</li>
+    <li>The username is: your
+Oracle username from last week</li>
+    <li>The password is: your
+password from last week<br>
+    </li>
+  </ul>
+  <li><span style="font-style: italic;">Set data to
+view</span>:
+You must also enter the data to
+display. Each data set to display is referred to as a "layer" in
+Spatial Console. With the "Layers" tab selected (right hand side of
+screen) "Add" a new layer from the "Action" menu.&nbsp;</li>
+  <ul>
+    <li>Select the connection
+(e.g., 451235) from the pull down
+menu</li>
+    <li>Set the table name to be
+the new data set copied from
+spatial,
+i.e., my_world_continents. Spatial Console should automatically
+propagate the layer details with all the metadata for the data set</li>
+    <li>Set the "Unique ID column"
+to "ID". <br>
+    </li>
+  </ul>
+  <li><span style="font-style: italic;">Layer caching</span>:
+For small data sets you can answer "No" to the question "Would you like
+to cache the layer?" <br>
+  </li>
+  <li><span style="font-style: italic;">Move around
+the map</span>: The map should now
+be displayed. The
+icons at the top of the screen allow you to zoom and pan around the
+data. Try this.&nbsp;&nbsp;</li>
+  <li><span style="font-style: italic;">Select
+continents</span>:<span style="font-style: italic;"> </span>Spatial
+Console also has a select function where you can select objects and
+view the data associated with those objects. Work out how to achieve
+this and explore any other capabilities of spatial viewer you can
+find.&nbsp; <br>
+  </li>
+</ol>
+We shall not use the data viewer as the basis for future exercises. But
+it is always there to allow you to graphically view,
+explore, and perform simple queries on data if you wish. A free,
+limited, trial version of the&nbsp;software
+may also be downloaded via the course web site in case you want to use
+it at home. <br>
+<h3>Exercise P2.2: Overview of
+spatial objects <br>
+</h3>
+This exercise will shows you how to get overview information about
+a&nbsp;database's spatial data contents, using the SQL*Plus instant
+client. You will retrieve information about the basic spatial
+properties of objects described by the database. The focus is on the
+geometry processing functions of Oracle. We will use the US
+data from the Digital Chart of the World dataset.
+<ul>
+</ul>
+<ol>
+  <li><span style="font-style: italic;">Login to the
+course database server</span> (in <span style="font-style: italic;">Oracle
+SQL*Plus
+instant client</span>).
+Log in to the server using technique covered in the last
+practical.</li>
+  <li><span style="font-style: italic;">Get an
+overview of the
+available data</span>: List all the
+data attributed to the owner
+"Spatial" (this was covered in the last practical). Verify if
+the&nbsp;following tables are present: world_continents,
+world_countries, us_cities, us_interstates, us_parks, us_rivers,
+us_states, us_restaurants.&nbsp;</li>
+  <li><span style="font-style: italic;">Attributes
+of
+the&nbsp;table containing spatial data</span>:
+Find out the
+name of the column containing attributes of the spatial data type for
+each of the tables listed above. Provide the answer in the form of a
+SELECT
+statement. HINT: The geometry columns in Oracle are of the
+type&nbsp;SDO_GEOMETRY.</li>
+  <li><span style="font-style: italic;">Information
+about spatial
+coordinates</span>: We will find out
+some
+basic&nbsp;information about the coordinate systems used to store
+spatial objects. We will use
+the state of New York (us_states.state_abrv='NY') and other US states.</li>
+  <ol style="list-style-type: lower-alpha;">
+    <li><span style="font-style: italic;">Find out
+the type of the spatial object</span>:
+one of the most important
+information we need about a specific spatial object is what type of
+object it is (point, line, polygon, ...). Find out what is the spatial
+data type of the state of New York? Use the
+following query template:
+      <div class="example">SELECT
+a.geom.SDO_GTYPE
+geom FROM spatial.us_states a WHERE ...;</div>
+Note the output of the geometry type. The format is D00T.&nbsp;2003
+- '2' identifies the number of dimension of the spatial object (1,2,3
+or 4 if temporal), '3' identifies the type of geometry (1 - point, 2 -
+line, 6 - multiline, 3 - polygon, 7 - multipolygon,...). More
+information about the codes used for geometry types is contained in the
+lecture notes and in Kothuri
+et al., 2004.<br>
+HINT: note the use of the alias a for the table us_states. You can use
+this technique in and SELECT statement to avoid
+typing long identifiers. Also note the output, where the selected
+information has a new assigned column name, GEOM. You can use this
+approach for customized system outputs.</li>
+    <li><span style="font-style: italic;">Find out
+the spatial reference system in which the geometry is defined</span>:
+The SRID is a code specifying in what coordinate system the
+spatial&nbsp;objects are stored. Find out what coordinate system
+Georgia's coordinates are stored in. <br>
+      <div class="example">SELECT
+a.geom.SDO_SRID FROM
+spatial.us_states a WHERE ...;</div>
+    </li>
+    <li><span style="font-style: italic;">Identify
+the SRID used</span>: the cryptic
+identifiers of the Oracle SRID
+can be translated into standard notation and vice versa. Find out the
+SRID code for the standard Australian Geodetic 1966 system used for the
+official mapping.<br>
+Hint: use the query as a template:
+      <div class="example">SELECT
+wktext FROM MDSYS.CS_SRS
+WHERE srid='8307';</div>
+You can use the columns wktext or cs_name to identify the coordinate
+system. HINT: Use the&nbsp;SQL '<big><span
+ style="font-family: monospace;">LIKE</span></big>'
+operator, if you do not know the exact input string (you can use
+'%pattern%' if you do want to match only a pattern and not the exact
+string):&nbsp;
+      <div class="example">SELECT
+column_name1 FROM
+table_name
+WHERE column_name2 LIKE '%pattern%';</div>
+    </li>
+  </ol>
+  <li><span style="font-style: italic;">Information
+about spatial
+properties</span>: In addition to
+coordinates, we can find out a
+variety of spatial information for our spatial data. <br>
+    <span style="font-style: italic;"></span></li>
+  <ol style="list-style-type: lower-alpha;">
+    <li><span style="font-style: italic;">Compute
+area</span>s: Find
+the area of the US state of
+NY. HINT: to work with the geometries in Oracle, you have to provide a
+spatial function and its parameter as arguments of the SELECT
+statement. The usual template is: <big><code>SDO_FUNCTION
+(parameter1,parameter2,...)</code></big>.
+The area function
+looks like this: <br>
+      <div class="example">SELECT
+SDO_GEOM.SDO_AREA
+(geometry_column, tolerance, units) FROM ...</div>
+The units parameter is optional. Set the tolerance to 1 (see below for
+information about tolerance). Provide
+the answer in both square yards and square meters in the same table
+('unit=sq_yard' and
+'unit=sq_meter'). Make sure you give the output columns sensible
+headings. Once you've got the area of New York, write a query
+to list the names of all US states, in descending order of area
+(largest first). What is the fourth largest state?<br>
+    </li>
+    <li><span style="font-style: italic;">Compute
+perimeter</span>s:
+The function returning length for lines also returns the perimeter for
+polygons. The function is <big><code>SDO_GEOM.SDO_LENGTH(geometry_column,
+tolerance, units)</code></big>.
+Find out the perimeter of
+the state of
+New York. Provide the answer in
+meters and miles (in one query). Now write a query to list the names of
+all US states, in descending order of perimeter (longest first). What
+is the state with the fourth longest perimeter?&nbsp; <br>
+    </li>
+    <li><span style="font-style: italic;">Determine
+the bounding box of a spatial object</span>:
+Bounding boxes are
+an important concept in spatial data handling. They provide the extent
+of the object along the ordinates of the coordinate system
+(northernmost point of a continent, and so on...). The function
+SDO_MBR(geometry) returns the minimum bounding rectangle (MBR) of a
+geometry. Find the MBR of New York. You can also retrieve the
+individual values along each dimension (x=1,
+y=2, z=3; or lon, lat, height).
+      <div class="example">SELECT
+SDO_GEOM.SDO_MIN_MBR_ORDINATE
+(geometry_column, dimension_no) FROM ...</div>
+Retrieve the north-south extent of NY. Write a (single) SQL statement
+to give the minimum and maximum latitude for each state. Label the
+columns in your statement NAME, MAXLAT, and MINLAT. HINT:
+Assign aliases to the outputs of the SELECT statement
+      <div class="example">SELECT
+(Function1
+(parameters...)) alias1, (Function2
+(parameters...)) alias2 from ...</div>
+    </li>
+  </ol>
+</ol>
+The tolerance value (in P2.2.5a) is needed to specify the degree of <span
+ style="font-style: italic;">precision </span>used
+to
+compute the
+answer to several different spatial functions, including area. For
+spatial data using geodetic coordinates, a tolerance value of 1 means
+that only points further apart than 1m will be considered to be
+distinct points. Setting the tolerance too large will result in strange
+answers (where distinct points are "snapped" together). Setting the
+tolerance too small will decrease the speed and efficiency of the
+spatial operation. Happily, the gap between "too large" and "too small"
+is usually very generous. In most cases, any tolerance from a wide
+variety of values will result in efficient retrieval of the correct
+answer. Repeat P2.2.5a with different tolerance values to reassure
+yourself you get the same answer (try tolerances of 10, 100, 1000,
+10000, 0.1, 0.001, 0.0001, ...). Some spatial operations are more
+sensitive to tolerance values than others. However, in this course it's
+safe to always select the default tolerance of "1". <br>
+<h3>Exercise P2.3: Spatial data
+storage <br>
+</h3>
+In this exercise, you will define and create your own table with sample
+spatial data. You will have to create a metadata entry for those
+tables: all spatial data in oracle needs metadata to describe its
+coordinate system. At the end
+of the lab,
+don't forget to remove the metadata entries, drop the table and
+indexes. <br>
+<ol>
+  <ol style="list-style-type: lower-alpha;">
+  </ol>
+  <li><span style="font-style: italic;">Inserting
+spatial data</span>: create a table
+"petrolstation" with spatial
+data in the column location. You will
+create a table containing the coordinates of three "petrol stations",
+with the following coordinates:<br>
+    <table style="text-align: left; height: 204px; width: 407px;"
+ border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td colspan="1" rowspan="2">Name
+(varchar2(8))</td>
+          <td colspan="1" rowspan="2">ID
+(NUMBER)</td>
+          <td colspan="2" rowspan="1">SDO_GEOMETRY</td>
+        </tr>
+        <tr>
+          <td>Lon</td>
+          <td>Lat</td>
+        </tr>
+        <tr>
+          <td>Agip</td>
+          <td>1</td>
+          <td>-77.01669</td>
+          <td>33.90124</td>
+        </tr>
+        <tr>
+          <td>Shell</td>
+          <td>2</td>
+          <td>-77.017</td>
+          <td>33.90120</td>
+        </tr>
+        <tr>
+          <td>Texaco</td>
+          <td>3</td>
+          <td>-77.018</td>
+          <td>33.9013</td>
+        </tr>
+      </tbody>
+    </table>
+HINT: Use the following template:<br>
+    <div class="example">CREATE
+TABLE petrolstation(<br>
+name &nbsp;&nbsp;&nbsp; VARCHAR2(8),<br>
+ID&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; NUMBER,<br>
+location&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+SDO_GEOMETRY<br>
+);<br>
+    <br>
+INSERT INTO petrolstation VALUES (<br>
+...., SDO_GEOMETRY(<br>
+2001, &nbsp;&nbsp;&nbsp; --SDO_GTYPE attribute specifying
+points of dimension 2<br>
+8307,&nbsp;&nbsp;&nbsp; --other parameters of SDO_GEOMETRY,
+set to 8307 for now<br>
+SDO_POINT_TYPE&nbsp;&nbsp;&nbsp;-- point type
+specification, coordinates follow<br>
+(value1,&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; -- value
+of ordinate 1 (longitude)<br>
+value2,&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;-- value of ordinate 2 (latitude)&nbsp; <br>
+NULL&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; -- 3rd ordinate, NULL if 2D object <br>
+),<br>
+NULL,<br>
+NULL<br>
+)<br>
+);</div>
+  </li>
+Some of the codes and NULL values in the insert statement may seem a
+bit strange. These values are all required by oracle to parameterize
+the new geometry. The lectures will provide more information on which
+codes to use and exactly what they mean. However, the Oracle Spatial
+documentation and Kothuri et al. (2004) are definitive texts to refer
+to if in doubt. Note the "--" notation. You can use it to insert
+comments
+into longer SQL statements for your own orientation. Try to store the
+insert segment&nbsp;in a text document with the
+extension *.sql. You can load it using:&nbsp;
+  <div class="example">START
+path_to_file.sql</div>
+  <li><span style="font-style: italic;">Create
+metadata entry for the spatial table</span>:
+Oracle spatial
+treats all the objects with a spatial column in one table as a spatial
+layer. If you insert metadata information about this layer in a
+metadata table, Oracle will be able to create spatial indexes,
+reproject data, and perform more advanced analysis on this objects.
+Metadata information in Oracle spatial covers the type of the layer
+(its
+dimensions), its geographic bounds, tolerance, and spatial reference
+system information.
+    <div class="example">INSERT
+INTO
+user_sdo_geom_metadata VALUES(<br>
+'PETROLSTATION', --table name<br>
+'location', &nbsp;&nbsp;&nbsp; &nbsp;-- name of spatial
+column<br>
+SDO_DIM_ARRAY&nbsp;&nbsp;&nbsp; -- DIMINFO attribute,
+stores dimension bounds and tolerance<br>
+(<br>
+SDO_DIM_ELEMENT<br>
+(<br>
+'LONGITUDE', -- dimension name for first dimension<br>
+-180,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-- SDO_LB - lower bound of the dimension values<br>
+180,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-- upper bound for the dimension values<br>
+0.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-- tolerance for values - 0.5 meters&nbsp;&nbsp; <br>
+),<br>
+SDO_DIM_ELEMENT<br>
+(<br>
+'LATITUDE', -- dimension name for second dimension<br>
+-90,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-- SDO_LB - lower bound of the dimension values<br>
+90,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-- upper bound for the dimension values<br>
+0.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+-- tolerance for values - 0.5 meters&nbsp;&nbsp; <br>
+)<br>
+),<br>
+8307&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; --
+SRID value for WGS84<br>
+);</div>
+Verify the creation of the table by selecting its records. If you like,
+you should also be able to view your new spatial data using the JBO
+viewer. <br>
+  </li>
+</ol>
+<h3>Exercise P2.4: Spatial
+indexes&nbsp;</h3>
+Spatial indexes speed up the
+retrieval of spatial object based on their geometric properties, and
+enable faster execution of some spatial analysis functions. Many
+ingenious spatial indexes have been proposed, some of which we will
+examine in more detail later in the course. However, it is not
+necessary to understand how an index works in order to use it in
+Oracle. In this section we will create an index for our spatial data.
+Although you won't see and change to your data, creating an index is
+required for many spatial analyses. (If you don't believe this, you
+might like to try to skip ahead to P2.5.2 and see what happens!)
+<ol>
+  <li><span style="font-style: italic;">Creation of
+spatial index</span>:
+Create a spatial index on the location column of the petrolstation
+table using the following template:
+    <div class="example">CREATE
+INDEX indexname ON
+tablename(spatial_column) INDEXTYPE IS MDSYS.SPATIAL_INDEX;</div>
+It is recommended to always perform a:
+    <div class="example">DROP
+INDEX indexname;</div>
+statement
+for a specific index before creating a new one. Note that depending on
+the nature of the spatial index (Quadtree,
+R-tree, ...) after deletion/insertion of data in the table the index
+may need to be re-created. Also, different geometric layouts of the
+data
+can justify the use of different indexes. The default index in Oracle
+Spatial is the <span style="font-style: italic;">R-Tree</span>,
+but
+other indexes are also possible. R-trees, quadtrees, and many other
+indexes will all be covered later in the course. <br>
+  </li>
+  <li><span style="font-style: italic;">List all
+indexes</span>:
+Sometimes it is useful to know which indexes have already been created.
+The "user_indexes" table contains this information, as shown in the
+following query:
+    <div class="example">SELECT
+index_name, table_name
+FROM
+user_indexes; </div>
+  </li>
+</ol>
+<h3>Exercise P2.5: Simple
+geometric analysis</h3>
+In this section we perform some simple geometric analyses covered in
+the lectures. In the next practical we shall perform some more complex
+analyses.<br>
+<ol>
+  <li><span style="font-style: italic;">Querying
+distances</span>:
+The
+distance between any geometry (point, line, or polygon) and point can
+be determined using the function SDO_GEOM.SDO_DISTANCE(geom1, geom2,
+tolerance, units). Note that in the case of the distance between a line
+or polygon and a point the procedure retrieves the <span
+ style="font-style: italic;">minimum </span>distance
+(see lecture
+notes for more information). For example, try the following query which
+will provide the distance in miles between two of the petrol stations.
+What are the distances between all pairs of the petrol stations?<br>
+    <div class="example">SELECT
+SDO_GEOM.SDO_DISTANCE(a.location,
+b.location, 1, 'unit=mile') FROM petrolstation a, petrolstation b WHERE
+a.name='Agip' and b.name='Texaco';<br>
+    </div>
+  </li>
+  <li><span style="font-style: italic;">Advanced
+distance</span>:<span style="font-style: italic;"> </span>Select
+the names of the 10
+closest
+restaurants from the restaurant POI_ID=33625120 (us_restaurants table).
+The general template
+for the distance clause is as for that above:
+    <div class="example">SELECT
+SDO_GEOM.SDO_DISTANCE(query_objects, origin_object,tolerance) FROM ...;</div>
+However, you will need to use a nested statement and the operator
+ROWNUM from Practical 1 to answer this question. Assign an alias
+'DISTANCE' to the function
+SDO_GEOM.SDO_DISTANCE and order by distance for the first subquery.</li>
+  <li><span style="font-style: italic;">Within
+distance</span>: We
+can
+also find places that are within a certain distance of each other
+(assuming an index has been created) using the SDO_WITHIN_DISTANCE
+function. Try the following query, inserting a range of sensible values
+in place of the distance "x": <br>
+    <div class="example">SELECT
+* FROM petrolstation a,
+petrolstation
+b
+WHERE SDO_WITHIN_DISTANCE(a.location, b.location, 'distance=x
+unit=METER')='TRUE'; </div>
+  </li>
+  <li><span style="font-style: italic;">Buffering</span>:
+A buffer
+creates a new geometry containing all the locations within a specified
+distance of a input geometry. Create buffers of 1 mile around each of
+the petrol stations, using the following template:<br>
+    <div class="example">SELECT
+SDO_GEOM.SDO_BUFFER(geometry,
+distance,
+tolerance, units) FROM ... </div>
+  </li>
+  <li><span style="font-style: italic;">Centroid</span>:
+We can
+create
+the centroid (center of gravity) for a polygonal shape using the
+following template:
+    <div class="example">SELECT
+SDO_GEOM.SDO_CENTROID(geometry,
+tolerance) ... </div>
+Use this template to find the centroid of the buffer of 1000m for
+the shell petrol station. What do you notice about this centroid and
+why? <br>
+  </li>
+</ol>
+<h3>Assessment A2: Spatial SQL</h3>
+<h4>Marking</h4>
+<ul>
+  <li>Your submission will be
+marked out of <span style="font-weight: bold;">10</span>,
+with up to one
+mark awarded per
+question. <br>
+  </li>
+  <li>A perfect answer will be
+awarded <span style="font-weight: bold;">1
+mark</span>. A near-perfect answer
+(almost exactly right, but
+perhaps
+with some slight mistake or missing step) may be awarded <span
+ style="font-weight: bold;">half a mark</span>.
+Anything else will be
+awarded <span style="font-weight: bold;">0
+marks</span>. <br>
+  </li>
+  <li><span style="font-weight: bold;">Marks</span>
+will be <span style="font-weight: bold;">deducted</span>
+for any incorrect
+submissions (e.g., using a Word or HTML document instead of a plain
+text file; files that contain other than 10 answers with one answer or
+comment per
+line; answers not in the correct order; answers that contain non-SQL
+parts, such as question numbers, or characters, such as double
+quotation " marks instead of single quotation ' marks).<br>
+  </li>
+  <li>It is not possible to get
+negative marks (e.g., an
+assignment
+score of 1 out of 10 with 2 marks deducted for incorrect submission
+will be a final mark of 0, not -1).</li>
+</ul>
+<h4>Assignment</h4>
+The questions you must answer for this assignment all concern the
+sample
+data from the US Census Bureau the Digital Chart of the World used in
+the practicals. Your assignment is to
+provide SQL/Oracle statements to
+answer to the following 10 questions (see "Submission" section above
+for more details). <br>
+<ol>
+  <li>List in alphabetical order
+the country names and spatial object
+geometry types (SDO_GTYPE) for all the countries
+beginning with "An".</li>
+  <li>List the spatial reference
+system (SDO_SRID) in which the
+coordinates of
+Australia are stored.</li>
+  <li>List the <span style="font-style: italic;">official</span>
+name
+(not wktext!) of the coordinate system with SRID 2236. </li>
+  <li>List the country name (in
+alphabetical order), area (in square
+kilometers), perimeter (in kilometers), and the maximum latitudes of
+all countries beginning with the letter "U". You must give your
+column headings meaningful and concise aliases (i.e., "Area",
+"Perimeter", "Maxlat"). <br>
+  </li>
+  <li>List the name, area (in
+square meters, computed from the
+geometry) and perimeter (in meters) of all
+US states with populations
+("totpop" attribute) of
+more than 15 million people. Your list must be in decreasing order of
+population (most
+populous first) and must again use sensible aliases for your column
+headings.</li>
+  <li>Find the minimum distance in
+miles from the city of
+"Fresno"
+("us_cities" table, "city" attribute) to the "Potomac" river
+("us_rivers" table, "name" attribute).</li>
+  <li>List the names, state
+abbreviation, and distances (in miles) of all US cities
+that are within 100 miles
+of New York city. List your answer in order of
+distance (nearest first). Note: you must use the SDO_GEOM.SDO_DISTANCE
+function to answer this query instead of the SDO_WITHIN_DISTANCE
+function (because you do not have enough privileges to create the index
+required for the SDO_WITHIN_DISTANCE function for tables in the
+"spatial" schema). <br>
+  </li>
+  <li>List the names of the cities
+in the US state of "Oregon" in
+order
+of distance to the center (centroid) of the
+state (closest first).</li>
+  <li>Create a buffer of 100 miles
+around the "Hudson" river.</li>
+  <li>List in alphabetical order
+the names of the countries whose s have areas
+that
+are more than 15% larger than the area reported in the
+"sqmi_cntry" attribute of the "world_countries" table.</li>
+</ol>
+</div>
+<a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img
+ alt="Creative Commons License" style="border-width: 0pt;"
+ src="http://i.creativecommons.org/l/by/3.0/us/80x15.png"></a><br>
+This work is created by Matt Duckham (<a href="http://www.duckham.org">http://www.duckham.org</a>)
+and licensed under a <a rel="license"
+ href="http://creativecommons.org/licenses/by/3.0/us/">Creative
+Commons Attribution 3.0 United States License</a>.
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Matt Duckham: Spatial
+Databases Practical 1</title>
+  <style type="text/CSS" media="all">@import "teaching.css";</style>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+  <meta content="Matt Duckham" name="author">
+  <meta content="Spatial Databases Practical on introduction to SQL"
+ name="description">
+</head>
+<body>
+<div id="content">
+<h2>P1:
+Introduction to SQL<br>
+</h2>
+<h3>Objectives<br>
+</h3>
+<p>By the end of this practical
+you should be able to: <br>
+</p>
+<ol>
+  <li>log into an Oracle
+database;</li>
+  <li>perform basic
+operations on selected tables; and <br>
+  </li>
+  <li>retreive
+information from the database using SQL.</li>
+</ol>
+This practical should require <span style="font-style: italic;">two
+weeks</span> to complete. <br>
+<h3>Overview<br>
+</h3>
+<p>This practical will introduce
+you to the basic elements of the Structured Query Language (SQL) and
+you will learn how to interact with the Oracle 10g DBMS. The practical
+will use an Oracle 10g database containing sample
+data from the US Census Bureau and the Digital Chart of the World
+(covered
+in Kothuri
+et al., 2004). In this tutorial only non-spatial operations will be
+covered. <br>
+</p>
+<h3>Exercise P1.1: Using SQL*Plus <br>
+</h3>
+This exercise will cover the basics of connecting to
+an Oracle database through the SQL*Plus instant client, and will enable
+you to get an overview of the data available. Interacting directly with
+the Oracle DBMS through the SQL*Plus command line
+interface will help to get the grasp of the SQL syntax and is a basic
+technique we shall be using over coming weeks. <br>
+<ol>
+  <li><span style="font-style: italic;">Run Oracle
+SQL*Plus instant client</span>: In
+the practical labs, the
+SQL*Plus client can be started from the Windows Start menu (under
+"Departments", "Geomatics", "Oracle"). On some other machines to start
+the
+sqlplus client, you will need
+to run the executable file sqlplus.exe. The exact location of this file
+may vary from machine to machine, but is often located in the <code>c:\oraclient</code>
+directory. You can run this file using Windows
+file manager or the command line. You should be presented with a new
+command line window and
+the <code>SQL&gt;</code>
+prompt. If not, and
+you a "login" prompt, start a new command line prompt (Start menu
+-&gt;
+run -&gt; "cmd"), and change to
+your sqlpus client directory (e.g., cd <code>c:\oraclient</code>)
+and
+type <code>sqlplus /nolog</code>.
+    <br>
+  </li>
+  <li><span style="font-style: italic;">Login to the
+course database server</span>: The
+course uses a remote database
+server
+hosted in the geomatics department. To log in to the server you need
+the following details:</li>
+  <ol style="list-style-type: lower-alpha;">
+    <li>loginname:
+&lt;information supressed for public version&gt;<br>
+    </li>
+    <li>password:&nbsp;&lt;information
+supressed for public version&gt;</li>
+    <li>databasename:&nbsp;&lt;information
+supressed for public version&gt; </li>
+    <li>serveraddress:&nbsp;&lt;information
+supressed for public version&gt;</li>
+  </ol>
+To log in, at the <code>SQL&gt;</code>
+prompt type the
+following
+(substituting the correct information from above). When you log in for
+the first time, the system will require you to set a new password. Do
+this, and remember your password for future weeks. <br>
+  <div class="example">CONNECT
+loginname/password@//serveraddress:1521/databasename </div>
+  <li><span style="font-style: italic;">Get an
+overview of the
+available data</span>: When first
+logging in a new database, it
+is good
+to get the overview of the available data. Execute the statement:</li>
+  <div class="example">SELECT
+owner, table_name FROM
+all_tables;&nbsp; </div>
+This statement will list all the data tables already available to
+you in the teaching database, along with the "owner" of these
+tables. You will start with no tables of your own, but many tables will
+still be available for you to query. In particular, those owned by
+"spatial" are the ones we shall be using in this course. Note
+the pattern of the SELECT statement below (see the lecture notes or
+http://www.w3schools.com/sql for more information; square brackets
+below indicate optional clauses). Using this pattern, try to
+refine the SELECT statement above to show only those tables owned by
+"spatial". Ask for guidance from the demonstrators if you get stuck at
+this point.&nbsp;
+  <div class="example">SELECT
+[ DISTINCT | ALL ]<br>
+&nbsp;&nbsp;&nbsp; column_expression1, column_expression2,
+....<br>
+&nbsp;&nbsp;&nbsp; [ FROM from_clause ]<br>
+&nbsp;&nbsp;&nbsp; [ WHERE where_expression ]<br>
+&nbsp;&nbsp;&nbsp; [ GROUP BY expression1, expression2,
+.... ]<br>
+&nbsp;&nbsp;&nbsp; [ HAVING having_expression ]<br>
+&nbsp;&nbsp;&nbsp; [ ORDER BY order_column_expr1,
+order_column_expr2,
+...];<br>
+  </div>
+  <li><span style="font-style: italic;">Table
+description</span>:
+To get
+the description of the data
+available in a specific table, use the DESCRIBE statement. The
+DESCRIBE statement has the syntax:&nbsp;</li>
+  <div class="example">DESCRIBE
+owner.tablename</div>
+Get the description of the "us_cities" table (owner "spatial"). What
+does the output
+mean? <li><span style="font-style: italic;">View
+records of a
+table</span>: Issue SELECT
+statements
+allowing you to view the records of the "us_cities" table. Note that
+because this table is not owned by you, you will need to use the form
+"owner.tablename" whenever you refer to it in any SQL statement, like
+SELECT.&nbsp;</li>
+  <ol style="list-style-type: lower-alpha;">
+    <li>Use the * operator to
+select all the records.</li>
+    <li>Select the record of the
+city of Richmond.</li>
+    <li>Select the population
+(column pop90) of the city
+of Richmond (projection operation).</li>
+  </ol>
+You <span style="font-style: italic;">must</span>
+prefix an
+attribute reference with
+the table name (for example, us_cities.pop90) whenever the attribute
+name appears in more than one
+table in the FROM clause (to resolve any ambiguities). You <span
+ style="font-style: italic;">may</span>
+use this format
+even when the
+attribute name is unique in the tables you are querying, to be on the
+safe side.&nbsp; <li>Disconnnect
+from the database. Use the
+command
+DISCONNECT to
+disconnect from the database. Re-connect using the
+command connect and your connection string as specified earlier and try
+the EXIT command. Note the difference.<br>
+  </li>
+</ol>
+<h3>Exercise P1.2: Further SQL</h3>
+In the previous exercise you have aquired familiarity with the Oracle
+SQL*Plus instant client and the basic SQL command, SELECT. In this
+exercise you will learn additional commands and perform some basic
+non-spatial data analysis. We will look at nested SELECT statements and
+restrictions in SELECT statements. In addition to your lecture notes,
+you may need to refer to an SQL syntax guide to help you answer some of
+the following questions. There are many books on the subject, and the
+web site <a href="http://www.w3schools.com/sql">http://www.w3schools.com/sql</a>
+provides an excellent, simple, and accessible tutorial for all the SQL
+functions covered in this practical. <br>
+<ol>
+  <li><span style="font-style: italic;">List all the
+US cities in
+alphabetical order</span>: HINT: Use
+the ORDER BY operator. <br>
+  </li>
+  <li><span style="font-style: italic;">Count the US
+cities in
+California with a population of greater than 150000</span>:
+HINT:
+The
+state abbreviation for California is CA. You need to use the COUNT
+keyword and the AND keyword to chain conditions. <br>
+  </li>
+  <li><span style="font-style: italic;">Get the
+population of the
+largest city in Texas</span>: HINT:
+Try using the MAX operator.
+The
+state abbreviation for Texas is TX. </li>
+  <li><span style="font-style: italic;">Get the name
+of the city with
+the largest population in Texas</span>:
+HINT: You will probably
+need to
+use a <span style="font-style: italic;">nested</span>
+SELECT query to
+achieve this. When nesting a select query you enclose the entire
+subquery in parenthesis (brackets). </li>
+  <li><span style="font-style: italic;">List the 100
+most populous US
+cities</span>: HINT: The "most
+populous" cities means those with
+the
+highest population. There are at least two ways to do this. The
+simplest can
+be found by looking closely at the results of describing the table for
+US cities. Another more complex way is to use the special SQL variable
+"ROWNUM" in
+the WHERE clause of your SELECT statement to select only those records
+higher that a particular row number. However, check your answer
+carefully as you must be certain to order your cities by population <span
+ style="font-style: italic;">before</span>
+using ROWNUM
+to restrict
+your answer to only those most populous cities. Your list should be
+sorted in
+descending order (most populous first). <br>
+  </li>
+  <li><span style="font-style: italic;">Get the
+number of different
+states which contain the 100 most populous US cities</span>:
+HINT: The
+answer requires the number of <span style="font-style: italic;">different
+    </span>states,
+so two or more cities in the same state only
+count
+once.<br>
+  </li>
+</ol>
+Note that the value of a <span style="font-style: italic;">string</span>
+(Oracle data type varchar) in a SELECT statement must be always
+enclosed single quotes, e.g., 'value'.<br>
+<h3>Exercise P1.3: Data entry and
+join queries<br>
+</h3>
+In this exercise, you will define and create your own table with sample
+data; add and modify the data entries; and finally delete ("drop")
+the table. All the queries in the previous exercise concern the values
+in a single
+table (us_cities). The queries in this exercise are <span
+ style="font-style: italic;">join </span>queries,
+where the answers
+can only be found by combining information across multiple tables
+within a single SELECT statement.
+<ol>
+  <li><span style="font-style: italic;">Create the
+table "directory"</span>:
+Create a new table containing the name of a company, city, product
+name, and number of items sold. The items column will be an integer of
+length 3. Table creation is achieved using the "CREATE" statement. The
+relation
+scheme for your table is: <br>
+  </li>
+  <div class="example">directory(company:
+VARCHAR2(32),
+city:
+VARCHAR2(32),
+product_name: VARCHAR2(32),
+no_of_items: NUMBER)</div>
+What are the candidate keys for your new table? What should be the
+primary key for this table? <li><span style="font-style: italic;">Enter
+10 data records for your
+table</span>: HINT: Data entry is
+achieved using the SQL "INSERT"
+statement. You can invent whatever data you want, except for the "city"
+attribute, which must contain only names of cities from the "us_cities"
+table (at least two different names). You should also have at least two
+different products sold by at least two different companies.&nbsp;</li>
+  <li><span style="font-style: italic;">List the
+names of products
+along with the abbreviations for states they are sold in</span>:
+HINT:
+this is a join
+query requiring you
+to join your new "directory" table with the "us_cities" table, using
+the join field "city" on both tables. If you encounter problems, make
+sure the city names in the "city" column of your new "directory" table
+are spelt correctly, and are <span style="font-style: italic;">exactly
+    </span>as
+they appear in the "us_cities" table.&nbsp;</li>
+  <li><span style="font-style: italic;">List the
+total number of sales
+by state</span>: HINT: this is
+another join query requiring the
+use of
+the "GROUP BY" SQL keywords.&nbsp;</li>
+  <li><span style="font-style: italic;">List the
+total number of
+products sold by city</span>: This
+is similar to the previous
+query. <br>
+    <span style="font-style: italic;"></span></li>
+  <li><span style="font-style: italic;">Get the
+population of the city
+which has the company that sold
+most of the products</span>: This
+requires an extension of the
+previous
+query, using a nested SELECT statement.&nbsp; <br>
+  </li>
+  <li><span style="font-style: italic;">Update one
+of your directory
+records with new sales data</span>:
+Suppose it is Christmas and
+one of
+your companies has just sold a lot of one of your products in a
+particular city. Use the "UPDATE" statement to increase the number of
+items sold for that records. <br>
+  </li>
+  <li><span style="font-style: italic;">Delete the
+company that sold
+the least amount of the products
+from the table</span>: Suppose an
+underperforming company has be
+sold.
+Delete all the records in the table for the company that has in total
+the lowest number of sales. HINT: Use the SQL "DELETE" statement. This
+query can be achieved using <span style="font-style: italic;">one </span>nested
+SQL query!<br>
+  </li>
+  <li><span style="font-style: italic;">Drop the
+"directory</span><span style="font-style: italic;">"
+table</span>: When you are finished,
+you
+should delete the "directory" table using the "DROP" SQL statement. <br>
+  </li>
+</ol>
+<h3>Assessment A1: SQL Foundations</h3>
+<h4>Assignment</h4>
+The questions you must answer for your first assignment all concern the
+tables "us_cities" (familiar from practical 1) and "us_states"
+(contains demographic data for US states) which may both be accessed
+from the course database, using the same techniques as in the practical
+exercises. Your assignment is to provide SQL/Oracle statements to
+answer to the following
+10 questions (see "Submission" section above
+for more details). <br>
+<ol>
+  <li>Describe the "us_states"
+table.</li>
+  <li>List all the states names
+and state abbreviations for those US
+states with a total land area greater than 100,000 square miles
+("landsqmi" column). Order the list in descending
+order of total land area (largest area first). <br>
+  </li>
+  <li>List the names of states
+that have a greater percentage of their
+population
+at retirement age (from ages 60 and 64, "pct60_64" column) than
+teenagers (from 14
+and 17 years old, "pct14_17" column). <br>
+  </li>
+  <li>List in alphabetical order
+the names of states that have a
+population density of less than 10 people per square mile ("poppsqmi"
+column). Note that some states
+have no data for total area or population density (listed with zero
+"landsqmi" and "poppsqmi"). These states will need to be omitted from
+your listing. <br>
+  </li>
+  <li>List the names of US cities
+that begin with the letters "Sa"
+along with the <span style="font-style: italic;">name</span>
+of the
+state (not the state
+abbreviation) in which each city is located. Order your list in
+ascending order of state name (i.e., "A" first).</li>
+  <li>Get the total number of
+cities in the US with populations
+that account for more than 20% of the total population for the state in
+which each city is located. The "pop90" column gives the populations of
+cities in the us_cities table, while the "totpop" column gives the
+total population of states in the us_states table.&nbsp; </li>
+  <li>Cities in the us_cities
+table are ranked according to population
+(rank90). Display a table that lists each state abbreviation along with
+the ranks of the highest and lowest ranking cities&nbsp;in that
+state in terms of
+population. Order your table in alphabetical
+order of state abbreviation.&nbsp; </li>
+  <li>Create a new table with the
+following relation scheme:
+mystates(state: VARCHAR(32), state_abrv: VARCHAR(2), totpop: NUMBER). <br>
+  </li>
+  <li>Populate your new table with
+appropriate data from the us_states
+table for only the 20 largest states in terms of population.</li>
+  <li>Delete your new mystates
+table. </li>
+</ol>
+</div>
+<a rel="license" href="http://creativecommons.org/licenses/by/3.0/us/"><img
+ alt="Creative Commons License" style="border-width: 0pt;"
+ src="http://i.creativecommons.org/l/by/3.0/us/80x15.png"></a><br>
+This work is created by Matt Duckham (<a href="http://www.duckham.org">http://www.duckham.org</a>)
+and licensed under a <a rel="license"
+ href="http://creativecommons.org/licenses/by/3.0/us/">Creative
+Commons Attribution 3.0 United States License</a>.
+</body>
+</html>

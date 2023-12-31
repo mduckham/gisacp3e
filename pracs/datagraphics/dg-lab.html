@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Cartography and Geovisualisation Lab 1</title>
+    <style type="text/CSS" media="all">@import "teaching.css";</style>
+    <meta http-equiv="Content-Type" content="text/html;
+      charset=windows-1252">
+  </head>
+  <body>
+    <div id="content">
+      <h2>Lab / Data Graphics with Spreadsheets<br>
+      </h2>
+      <h3>Objectives</h3>
+      <ol>
+        <li>To gain experience of the different types of charts and
+          graphs commonly used to display data;&nbsp; <br>
+        </li>
+        <li>To critically assess charts and graphs in terms of the four
+          principles of data graphics;&nbsp; <br>
+        </li>
+        <li>To practice iterative redesign of data graphics.&nbsp;</li>
+      </ol>
+      <h3>In a nutshell...</h3>
+      <p>Your task is to use public data on urban development in
+        Melbourne to explore the range of charts and graphs you can
+        construct with Google Sheets. You should begin to form the habit
+        of assessing critically each chart you see in terms of the four
+        principles of data graphics: data density, data correspondence,
+        data integrity, and aesthetics. <br>
+      </p>
+      <h3>The fine print...</h3>
+      <p>You can complete this exercise individually, but ideally you
+        should work with a classmate, and discuss together your work.
+        You can start in the supervised lab session and continue as
+        required in your own time. The exercise is split into 5 stages:
+        getting the data, your first data graphic, critically assessing
+        your data graphic, a more complex data graphic, and putting it
+        all together.&nbsp; <br>
+      </p>
+      <h4>Stage 1: Get the data into Google Sheets<br>
+      </h4>
+      <p>First, you will need to load the tabular data on urban
+        development in Melbourne, used as a running example throughout
+        this course, into Google Sheets. There are a number of different
+        ways to do this. One method is summarized below. If you are
+        unfamiliar with Google Sheets and feel you need more assistance
+        in getting started or just a refresher, you can work through the
+        following Lynda training videos. Feel free to skip these if you
+        are already comfortable with spreadsheets like Excel and Google
+        Sheets.&nbsp; <br>
+      </p>
+      <ul>
+        <li>What is Google Sheets, <a
+href="https://www.lynda.com/Sheets-tutorials/What-Google-Sheets/163414/187745-4.html?org=rmit.edu.au">https://www.lynda.com/Sheets-tutorials/What-Google-Sheets/163414/187745-4.html?org=rmit.edu.au</a></li>
+        <li>Creating, naming, and saving a spreadsheet, <a
+href="https://www.lynda.com/Sheets-tutorials/Creating-naming-saving-spreadsheet/163414/187750-4.html?org=rmit.edu.au">https://www.lynda.com/Sheets-tutorials/Creating-naming-saving-spreadsheet/163414/187750-4.html?org=rmit.edu.au</a></li>
+        <li>Importing and converting .csv ... data and files, <a
+href="https://www.lynda.com/Sheets-tutorials/Importing-converting-csv-tsv-tab-txt-data-files/163414/187756-4.html?org=rmit.edu.au">https://www.lynda.com/Sheets-tutorials/Importing-converting-csv-tsv-tab-txt-data-files/163414/187756-4.html?org=rmit.edu.au</a><br>
+        </li>
+      </ul>
+      <p>Once you are ready to begin working with your data: <br>
+      </p>
+      <ol>
+        <li>Download the data in .csv (comma separated variable) format
+          direct from the Development Activity Melbourne website <a
+            href="http://developmentactivity.melbourne.vic.gov.au">http://developmentactivity.melbourne.vic.gov.au</a>.
+          <br>
+        </li>
+        <li> Open a new Google Sheet in Google Drive <a
+            href="http://drive.google.com">http://drive.google.com</a>
+          ("New..." -&gt; "Google Spreadsheet"). <br>
+        </li>
+        <li>Import your downloaded .csv file into your Google
+          spreadsheet ("File" -&gt; "Import" -&gt; "Upload").</li>
+      </ol>
+      <p>Once you have your data uploaded, make sure you give your
+        spreadsheet and the tab containing the data sensible names. Then
+        have a look through your data, familiarize yourself with what is
+        there. If you are in any doubt about what the different columns
+        and data items mean, have a look through the metadata (literally
+        "data about data") also accessible on the download site <a
+          href="http://developmentactivity.melbourne.vic.gov.au">http://developmentactivity.melbourne.vic.gov.au</a>.
+        What do you notice about the data? <br>
+      </p>
+      <h4>Stage 2: Your first data graphic<br>
+      </h4>
+      <p>Sometimes for small and clean data sets, viewing raw data in
+        tables can be a quick way of understanding the data. However,
+        even for moderately large and "messy" data sets (such as your
+        data) you need a data graphic to help someone understand the
+        patterns in the data. <br>
+      </p>
+      <p>We'll start by building a chart of the number of completed
+        buildings by year. We'll repeat the procedure to do this, which
+        involves first some reformatting and summarizing of the data,
+        multiple times. So please ask for help in the lab if you get
+        stuck or confused doing this. You may also find the following
+        Lynda videos helpful if you need additional background
+        assistance: <br>
+      </p>
+      <ul>
+        <li>Using pivot tables, <a
+href="https://www.lynda.com/Sheets-tutorials/Using-pivot-tables/163414/187786-4.html?org=rmit.edu.au">https://www.lynda.com/Sheets-tutorials/Using-pivot-tables/163414/187786-4.html?org=rmit.edu.au</a></li>
+        <li>Creating charts in Google Sheets, <a
+href="https://www.lynda.com/Sheets-tutorials/Using-pivot-tables/163414/187786-4.html?org=rmit.edu.au">https://www.lynda.com/Sheets-tutorials/Using-pivot-tables/163414/187786-4.html?org=rmit.edu.au</a></li>
+      </ul>
+      <p>Once you are ready to dive in, here's the procedure for
+        summarizing your data with a pivot table:<br>
+      </p>
+      <ol>
+        <li>Select all your raw data (Stage 1) and insert a new pivot
+          table ("Insert" -&gt; "Pivot table..."). A pivot table allows
+          you to quickly summarize large data sets. <br>
+        </li>
+        <li>To summarize the years in which buildings were completed,
+          add the "year_completed" field to the "Rows" of your pivot
+          table. Sort ascending, and uncheck the "Show totals" box (it
+          makes no sense to add together the years!)</li>
+        <li>Next to summarize the status of the buildings, add the
+          "status" field to the "Columns of your pivot table. Again,
+          uncheck the "Show totals" box, it is not meaningful in this
+          context. <br>
+        </li>
+        <li>Now we need to add some values into the table. The values we
+          need are the counts of completed buildings. To do this, add
+          the "status" field again, but this time to the "Values", and
+          summarized by "COUNTA" (counts of buildings).</li>
+        <li>Finally, the "year_completed" field is only relevant to
+          buildings with "status" as "COMPLETED". So add a "Filter" with
+          the "status" field, and only "COMPLETED" shown. <br>
+        </li>
+      </ol>
+      <p>Almost there! Now you are ready to chart your data. <br>
+      </p>
+      <ol>
+        <li>Select the two columns, which should now contain your counts
+          of completed buildings from 2002-2017. The "Insert" -&gt;
+          "Chart..."</li>
+        <li>You will now be presented with the Chart editor, which
+          offers you a wide range of different options for how to
+          present your data. Insert as a column chart with the default
+          settings. <br>
+        </li>
+      </ol>
+      <h4>Stage 3: Critically assess your data graphic<br>
+      </h4>
+      <p>Often (but not always) the defaults in Google Charts are quite
+        sensible. (Note that this is usually <i>not</i> the case for
+        most spreadsheet and mapping programs. As we will see in later
+        weeks, the defaults are frequently quite <i>stupid</i>). But
+        there are always choices, even with sensible defaults. Look
+        critically at your data graphic and find:<br>
+      </p>
+      <ul>
+        <li>one problem with data density (hint: think "data/ink ratio")</li>
+        <li>one problem with data integrity (hint: look carefully at
+          your pivot table and then again at your chart)</li>
+        <li>one problem with data correspondence (hint: how easy is it
+          to compare the relative completed buildings in 2015 versus
+          2006?)</li>
+        <li>one problem with aesthetics (hint: in fact, the defaults for
+          this simple chart pretty good, but think alignment, spacing,
+          balance, could they be improved?)<br>
+        </li>
+      </ul>
+      <p>Now, explore different options for your chart using Google
+        Sheets. Using the "Chart editor" (if it has disappeared either
+        create a new chart or click on your existing chart and select
+        "Edit..."):<br>
+      </p>
+      <ul>
+        <li>find one way to make your data density <i>worse</i> and
+          another way to make it <i>better</i>.<br>
+        </li>
+        <li>find one way to make your data integrity <i>worse</i> and
+          another way to make it <i>better</i>.</li>
+        <li>find one way to make your data correspondence <i>worse</i>
+          and another way to make it <i>better</i>.</li>
+        <li>find one way to make your aesthetics <i>worse</i> and
+          another way to make them <i>better</i>.</li>
+      </ul>
+      <p>Next explore the different <i>types</i> of chart, and compare
+        these with your (best) column chart in terms of the four
+        principles of data graphics. You should construct and compare: <br>
+      </p>
+      <ul>
+        <li>a bar chart,</li>
+        <li>a line chart, <br>
+        </li>
+        <li>an area chart, <br>
+        </li>
+        <li>a scatterplot,</li>
+        <li>a pie chart, and <br>
+        </li>
+        <li>a gauge chart (!)</li>
+      </ul>
+      <p> Note that in all cases the point of the exercise is not simply
+        to construct the data graphic, but to critically assess its
+        suitability (in terms of the four principles of data graphics)
+        and begin to iteratively redesign your data graphic to improve
+        it.<br>
+      </p>
+      <p>For a bonus mark, you can export your best charts to an image,
+        and upload them to the Lab 1 discussion board, along with a
+        brief summary of why it is your best image, to share and comment
+        with others in the class.</p>
+      <p> </p>
+      <h4>Stage 4: More complex data graphics<br>
+      </h4>
+      <p>Use the techniques you have learned to construct some more
+        sophisticated data graphics showing: <br>
+      </p>
+      <ul>
+        <li>The total completed buildings by year by suburb, for the 5
+          suburbs Carlton, Docklands, East Melbourne, North Melbourne,
+          and Melbourne (CBD);<br>
+        </li>
+        <li> The number of bike spaces associated with developments
+          applied, approved, completed, and under construction across
+          different suburbs. <br>
+        </li>
+        <li>The total proportion of residential dwellings associated
+          with developments applied for from each suburb. <br>
+        </li>
+        <li>The number of floors of all developments in Melbourne by
+          year. You might also try to incorporate the different suburbs
+          in this data graphics. (Hint: this does not require a pivot
+          table, you should use the raw data, and Google Sheets'
+          defaults are not a good choice).&nbsp; <br>
+        </li>
+      </ul>
+      <p>Again, in each cases critically assess your data graphic with
+        reference to the four principles of data graphics, and
+        iteratively redesign your data graphic to improve it.<br>
+      </p>
+      <p>For a bonus mark, you can export your best charts to an image,
+        and upload them to the Lab 1 discussion board, along with a
+        brief summary of why it is your best image, to share and comment
+        with others in the class.</p>
+      <p> </p>
+      <h3>Assessment</h3>
+      <p>This practical exercise is not assessed. However, by sharing
+        some of your best (and worst) data graphics (Stage 3/4) to the
+        discussion forum, you can gain a bonus mark (1%). Note: there is
+        a maximum total of 1 bonus mark on offer for this lab,
+        irrespective of the number of posts on the forum. <br>
+      </p>
+      <h3>Coda</h3>
+      <p><a rel="license"
+          href="http://creativecommons.org/licenses/by/3.0/deed.en_US"><img
+            src="88x31.png" style="border: 0px solid ; width: 88px;
+            height: 31px;" alt="Creative Commons License"></a><br>
+        This work by <a xmlns:cc="http://creativecommons.org/ns#"
+          href="http://duckham.org/" property="cc:attributionName"
+          rel="cc:attributionURL">Matt Duckham</a> is licensed under a <a
+          rel="license"
+          href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative
+Commons
+
+
+          Attribution 3.0 Unported License</a>.</p>
+      <p> </p>
+    </div>
+  </body>
+</html>
