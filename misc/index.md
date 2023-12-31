@@ -611,7 +611,7 @@ An index of more than 1200 terms used in this book is included in this repo in [
 | $k$-anonymity, **427**
 | $k$-means clustering, **378**, 378-380
 | Königsberg bridge problem, *112*
-| $k$D-tree, **243**
+| $k$ D-tree, **243**
 | kernel, **396**
 | kernel bandwidth, **389**
 | key field, **218**, 224
