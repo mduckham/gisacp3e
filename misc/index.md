@@ -27,7 +27,7 @@
   | adjacency matrix, **207**, 207--208
   | adjacency relationship, 16, 175, 177
   | aesthetics
-    | -> in data graphics, **310**
+    | \-\> in data graphics, **310**
   | affine transformation, **82**, 120
   | affordance, **334**
   | agent, *372*
