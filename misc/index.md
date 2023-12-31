@@ -1,3 +1,7 @@
+# Full index, third edition
+
+An index of more than 1200 terms used in this book is included in this repo in [pdf](gisacp-index.pdf), and in markdown below. When an important term is first defined or introduced, that term will appear in the margin of the text. A corresponding entry can be found in the index, with the page reference in bold typeface. Each index term has at most one bold typeface page reference, and a term can be rapidly located within a page by finding the corresponding margin entry. In addition to normal- and bold-typeface index entries, those index entries that appear in italics refer to terms that appear within an inset box.
+
 | Term 
 | ---
 | 2D orderings, 230-232
