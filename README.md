@@ -1,4 +1,4 @@
-# GIS: A Computing Perspective, Third Edition: Companion material
+# GIS: A Computing Perspective, Third Edition, Companion material
 
 This repository hosts companion material to accompany the third edition of the textbook "GIS: A Computing Perspective". 
 
@@ -18,7 +18,7 @@ Other important online resources connected with the textbook include:
 The following resources for students and instructors are in development. If you are a GIS instructor have a request to prioritise particular resources, please [contact the authors](http://gisacp.duckham.org/questions-about-the-book/). 
 
 - Downloadable PDFs for 5 open access chapters (Chapters 1, 2, 3, 8, 9) \[complete\]
-- Audiobook versions for 5 open access chapters (Chapters 1, 2, 3, 8, 9) \[planned 2024\]
+- Audiobook chapters (complete mp3 or set of zipped mp3 sections) for 5 open access chapters (Chapters 1, 2, 3, 8, 9) \[in progress\]
 - Outline presentation slides in MS Powerpoint and Google Slides for all chapters \[in progress\]
 
 
@@ -31,7 +31,7 @@ The following resources for students and instructors are in development. If you 
 | 5 | Representation and Algorithms | not available | not available | expected 08/24 
 | 6 | Structures and Access Methods  | not available | not available | expected 08/24 
 | 7 | Architectures | not available | not available | expected 08/24 
-| 8 | Cartography and Geovisualization | \[[repo](oa_chapters/10.1201_9780429168093-8_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-8/cartography-geovisualization-matt-duckham-qian-chayn-sun-michael-worboys)\]| expected 03/24 | expected 02/24
+| 8 | Cartography and Geovisualization | \[[repo](oa_chapters/10.1201_9780429168093-8_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-8/cartography-geovisualization-matt-duckham-qian-chayn-sun-michael-worboys)\]| \[[single mp3](https://drive.google.com/file/d/1v3AHfFBw4bGLoOfHn6nkqsI_afM_v03E/view?usp=sharing) \| [section zip](https://drive.google.com/file/d/1PjuzH5pJT15EkQ3ZQUNFexsqw4xMlO8U/view?usp=sharing) \] | \[[google](https://docs.google.com/presentation/d/1bx_zFJgwUCaFQ0fe6vly8xYS2Z8cmiJhZJXhO6PeqBE/edit?usp=sharing) \| [pptx](pptx/gisacp-chapter8.pptx) \]
 | 9 | Artificial Intelligence and GIS | \[[repo](oa_chapters/10.1201_9780429168093-9_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-9/artificial-intelligence-gis-matt-duckham-qian-chayn-sun-michael-worboys)\]| expected 03/24 | expected 02/24
 | 10 | Spatial Information in Context | not available | not available | expected 08/24 
 
