@@ -18,7 +18,7 @@ Other important online resources connected with the textbook include:
 The following resources for students and instructors are in development. If you are a GIS instructor have a request to prioritise particular resources, please [contact the authors](http://gisacp.duckham.org/questions-about-the-book/). 
 
 - Downloadable PDFs for 5 open access chapters (Chapters 1, 2, 3, 8, 9) \[complete\]
-- Audiobook chapters (complete mp3 or set of zipped mp3 sections) for 5 open access chapters (Chapters 1, 2, 3, 8, 9) \[in progress\]
+- Audiobook chapters (complete mp3 or set of zipped mp3 sections) for 5 open access chapters (Chapters 1, 2, 3, 8, 9) \[complete\]
 - Outline presentation slides in MS Powerpoint and Google Slides for all chapters \[in progress\]
 
 
@@ -26,14 +26,14 @@ The following resources for students and instructors are in development. If you 
 | ----------- | ----------- |  ----------- |  ----------- |  ----------- 
 | 1 | Introduction | \[[repo](oa_chapters/10.1201_9780429168093-1_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-1/introduction-matt-duckham-qian-chayn-sun-michael-worboys)\]| \[[mp3](https://drive.google.com/file/d/1G9XipvMl3MLoxyC7DZpT1rANNR2GjaU6/view) read by AI \| [mp3](https://drive.google.com/file/d/18G1nnhGXgjVM4oT-5-hggv8PryzFA9_G/view) read by AI clone of author\] | \[[google](https://docs.google.com/presentation/d/1NWYgRgmdm1eYZJLnw9WCQvB-Zsl_Td-v6Vny1UvYNTc) \| [pptx](pptx/gisacp-chapter1.pptx)\]
 | 2 | Fundamental Database Concepts | \[[repo](oa_chapters/10.1201_9780429168093-2_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-2/fundamental-database-concepts-matt-duckham-qian-chayn-sun-michael-worboys)\]| \[[mp3](https://drive.google.com/file/d/1uFV2OLqcXuNlGjLkmLpRSKNA1lHn4A0T/view) read by AI \| [mp3](https://drive.google.com/file/d/11KvHJAOD9xKJSL6vHqGkBEMUV3VX0CFe/view) read by AI clone of author\] |  \[[google](https://docs.google.com/presentation/d/1TbfpkpRY4xBJ0dChQytd_PcJyZHgN-OyyIYIZXY63yM) \| [pptx](pptx/gisacp-chapter2.pptx)\]
-| 3 | Fundamental Spatial Concepts | \[[repo](oa_chapters/10.1201_9780429168093-3_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-3/fundamental-spatial-concepts-matt-duckham-qian-chayn-sun-michael-worboys)\]| \[[mp3](https://drive.google.com/file/d/1SeAKH8Oy8Ze_-slaehmj6TO4LKGUrGgY/view) read by AI \| [mp3](https://drive.google.com/file/d/1T-TulPrf-UkgYFnqEi6h95P5dK-LZvzQ/view) read by AI clone of author\] | expected 12/24
-| 4 | Models of Geospatial Information | not available | not available | expected 12/24 
-| 5 | Representation and Algorithms | not available | not available | expected 12/24 
-| 6 | Structures and Access Methods  | not available | not available | expected 12/24 
-| 7 | Architectures | not available | not available | expected 12/24 
+| 3 | Fundamental Spatial Concepts | \[[repo](oa_chapters/10.1201_9780429168093-3_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-3/fundamental-spatial-concepts-matt-duckham-qian-chayn-sun-michael-worboys)\]| \[[mp3](https://drive.google.com/file/d/1SeAKH8Oy8Ze_-slaehmj6TO4LKGUrGgY/view) read by AI \| [mp3](https://drive.google.com/file/d/1T-TulPrf-UkgYFnqEi6h95P5dK-LZvzQ/view) read by AI clone of author\] | \[[google](https://docs.google.com/presentation/d/1n_EG0c0xJIrp0dsU2lcrijvsq53-chZCYUBS8a-sBNk) \| [pptx](pptx/gisacp-chapter3.pptx)\]
+| 4 | Models of Geospatial Information | not available | not available | expected 3/25 
+| 5 | Representation and Algorithms | not available | not available | expected 3/25 
+| 6 | Structures and Access Methods  | not available | not available | expected 3/25 
+| 7 | Architectures | not available | not available | expected 6/25 
 | 8 | Cartography and Geovisualization | \[[repo](oa_chapters/10.1201_9780429168093-8_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-8/cartography-geovisualization-matt-duckham-qian-chayn-sun-michael-worboys)\]| \[[single mp3](https://drive.google.com/file/d/1v3AHfFBw4bGLoOfHn6nkqsI_afM_v03E/view?usp=sharing) \| [section zip](https://drive.google.com/file/d/1PjuzH5pJT15EkQ3ZQUNFexsqw4xMlO8U/view?usp=sharing)\] | \[[google](https://docs.google.com/presentation/d/1bx_zFJgwUCaFQ0fe6vly8xYS2Z8cmiJhZJXhO6PeqBE/edit?usp=sharing) \| [pptx](pptx/gisacp-chapter8.pptx)\]
 | 9 | Artificial Intelligence and GIS | \[[repo](oa_chapters/10.1201_9780429168093-9_chapterpdf.pdf) \| [online](https://www.taylorfrancis.com/chapters/oa-mono/10.1201/9780429168093-9/artificial-intelligence-gis-matt-duckham-qian-chayn-sun-michael-worboys)\]| \[[single mp3](https://drive.google.com/file/d/1yTvvHT55mWHtxt8cQ9K6xhcxqdhv81w2/view) \| [section zip](https://drive.google.com/file/d/1Tr_8NCmx9dLJ3m2nZaqmSoS6tC5IAcri/view)\] | \[[google](https://docs.google.com/presentation/d/10kHL7FGoR3ukjrjIfrBGGCiDQts_cFc96TKkw3Aq2cE/edit?usp=sharing) \| [pptx](pptx/gisacp-chapter9.pptx)\]
-| 10 | Spatial Information in Context | not available | not available | expected 12/24 
+| 10 | Spatial Information in Context | not available | not available | expected 6/25 
 
 
 
